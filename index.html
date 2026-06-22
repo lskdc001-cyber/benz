@@ -79,7 +79,7 @@
     @page{ size:A4 portrait; margin:8mm; }
     html,body{background:#fff; padding:0; margin:0;}
     .wrap{max-width:100%;}
-    .btns,.sub,.edit-link,.seller-edit{display:none !important;}
+    .btns,.sub,.edit-link,.seller-edit,.no-print{display:none !important;}
     select,input{border:none !important; -webkit-appearance:none; appearance:none; box-shadow:none !important; height:auto !important; padding:0 !important;}
     .topbar{margin-bottom:2px;} .topbar .logo{font-size:18px;}
     .grid{margin-bottom:6px; gap:6px;}
@@ -133,7 +133,7 @@
   </div>
 
   <div class="grid g2">
-    <div>
+    <div class="no-print">
       <label class="fld">프로모션 할인율 (%)</label>
       <input type="number" id="promo" value="12" min="0" max="30" step="0.5">
     </div>
@@ -169,7 +169,7 @@
         <table class="q">
           <tr><td class="lbl">취득세 (7%)</td><td class="val" id="d-acq">—</td></tr>
           <tr><td class="lbl">공채 (할인)</td><td class="val" id="d-bond">—</td></tr>
-          <tr><td class="lbl">공채 할인율 (%)</td><td class="val"><input type="number" id="bonddc" class="smallN" value="17.8" min="0" max="100" step="0.1"></td></tr>
+          <tr class="no-print"><td class="lbl">공채 할인율 (%)</td><td class="val"><input type="number" id="bonddc" class="smallN" value="17.8" min="0" max="100" step="0.1"></td></tr>
           <tr><td class="lbl">등록부대비용</td><td class="val" id="d-misc">90,000</td></tr>
           <tr class="total"><td>TOTAL</td><td class="val" id="d-regtotal">—</td></tr>
         </table>
