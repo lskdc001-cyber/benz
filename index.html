@@ -52,6 +52,14 @@
     display:flex; align-items:baseline; justify-content:space-between;}
   .grand .gl{font-size:15px; font-weight:600;}
   .grand .gv{font-size:26px; font-weight:700; color:var(--accent);}
+  .modal-bg{position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center; z-index:999; padding:20px;}
+  .modal-box{background:#fff; border-radius:var(--radius); padding:22px; max-width:380px; width:100%;}
+  .modal-title{font-size:16px; font-weight:700; margin-bottom:10px;}
+  .modal-text{font-size:13px; color:var(--muted); line-height:1.7; margin:0 0 12px;}
+  .modal-list{font-size:13px; color:var(--text); line-height:1.9; margin:0 0 16px; padding-left:18px;}
+  .modal-list b{font-weight:600;}
+  .modal-btns{display:flex; gap:8px; justify-content:flex-end;}
+  .modal-btns .btn{flex:0 0 auto; padding:0 18px;}
   .note{font-size:11px; color:var(--hint); margin-top:14px; line-height:1.7;}
   .seller{margin-top:18px; font-size:12px; color:var(--muted); text-align:right; line-height:1.7;}
   .edit-link{display:inline-block; margin-left:8px; padding:3px 10px; font-size:11px; font-family:inherit;
@@ -79,7 +87,7 @@
     @page{ size:A4 portrait; margin:8mm; }
     html,body{background:#fff; padding:0; margin:0;}
     .wrap{max-width:100%;}
-    .btns,.sub,.edit-link,.seller-edit,.no-print{display:none !important;}
+    .btns,.sub,.edit-link,.seller-edit,.no-print,.modal-bg{display:none !important;}
     select,input{border:none !important; -webkit-appearance:none; appearance:none; box-shadow:none !important; height:auto !important; padding:0 !important;}
     .topbar{margin-bottom:2px;} .topbar .logo{font-size:18px;}
     .grid{margin-bottom:6px; gap:6px;}
@@ -102,7 +110,7 @@
 
   <div class="topbar">
     <span class="logo">현금 견적서</span>
-    <span class="date" id="today">MY26 · 2026.04.13 기준</span>
+    <span class="date" id="today">MY26/27 · 2026.06.22 기준</span>
   </div>
   <p class="sub">차종을 선택하면 가격과 견적이 자동 계산됩니다.</p>
 
@@ -208,18 +216,33 @@
 
   <div class="btns">
     <button class="btn" onclick="resetForm()">초기화</button>
-    <button class="btn primary" onclick="window.print()">인쇄 / PDF 저장</button>
+    <button class="btn primary" onclick="doPrint()">인쇄 / PDF 저장</button>
+  </div>
+
+  <div id="browserModal" class="modal-bg" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">외부 브라우저에서 열어주세요</div>
+      <p class="modal-text">카카오톡 등 앱 내 화면에서는 인쇄·PDF 저장이 지원되지 않습니다. 아래 방법으로 기본 브라우저(Safari·Chrome)에서 다시 열어주세요.</p>
+      <ul class="modal-list">
+        <li><b>아이폰</b> : 화면 오른쪽 아래 <b>공유 아이콘</b> → <b>Safari로 열기</b></li>
+        <li><b>안드로이드</b> : 화면 오른쪽 위 <b>점 3개(⋮)</b> → <b>다른 브라우저로 열기</b></li>
+      </ul>
+      <div class="modal-btns">
+        <button class="btn" onclick="closeBrowserModal()">닫기</button>
+        <button class="btn primary" onclick="copyUrl(event)">주소 복사</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-const DATA = [{"name":"A 220 (Hatch)","price":48100000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"AMG A 45 S 4MATIC+ (Hatch)","price":80400000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"A 220 Sedan","price":49900000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"AMG A 35 4MATIC","price":67700000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"CLA 250 4MATIC AMG Line","price":63700000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"AMG CLA 45 S 4MATIC+","price":90600000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"AMG CLA 45 S 4MATIC+ Final Edition","price":95800000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"GLA 250 4MATIC AMG Line","price":69100000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"GLB 200 d","price":63300000,"disp":"1950cc","cat":"A · CLA · GLA · GLB"},{"name":"GLB 250 4MATIC","price":71100000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"AMG GLB 35 4MATIC","price":78500000,"disp":"1991cc","cat":"A · CLA · GLA · GLB"},{"name":"C 200 AVANTGARDE","price":64300000,"disp":"1991cc","cat":"C · CLE"},{"name":"C 200 AMG Line","price":67500000,"disp":"1991cc","cat":"C · CLE"},{"name":"CLE 200 Coupe AMG Line","price":75700000,"disp":"1991cc","cat":"C · CLE"},{"name":"CLE 450 4MATIC Coupe AMG Line","price":98400000,"disp":"2999cc","cat":"C · CLE"},{"name":"AMG CLE 53 4MATIC+ Coupe","price":107700000,"disp":"2999cc","cat":"C · CLE"},{"name":"AMG CLE 53 4MATIC+ Coupe Limited Edition","price":131300000,"disp":"2999cc","cat":"C · CLE"},{"name":"CLE 200 Cabriolet AMG Line","price":82100000,"disp":"1991cc","cat":"C · CLE"},{"name":"CLE 450 4MATIC Cabriolet AMG Line","price":102600000,"disp":"2999cc","cat":"C · CLE"},{"name":"AMG CLE 53 4MATIC+ Cabriolet","price":113600000,"disp":"2999cc","cat":"C · CLE"},{"name":"AMG CLE 53 4MATIC+ Cabriolet Limited Edition","price":137300000,"disp":"2999cc","cat":"C · CLE"},{"name":"E 200 AVANTGARDE","price":76500000,"disp":"1991cc","cat":"E-Class"},{"name":"E 200 EXCLUSIVE","price":76600000,"disp":"1991cc","cat":"E-Class"},{"name":"E 200 AMG Line","price":80000000,"disp":"1991cc","cat":"E-Class"},{"name":"E 220 d 4MATIC EXCLUSIVE","price":86100000,"disp":"1993cc","cat":"E-Class"},{"name":"E 300 4MATIC EXCLUSIVE","price":93600000,"disp":"1999cc","cat":"E-Class"},{"name":"E 300 4MATIC AMG Line","price":97700000,"disp":"1999cc","cat":"E-Class"},{"name":"E 350 e 4MATIC EXCLUSIVE","price":98700000,"disp":"1999cc","cat":"E-Class"},{"name":"E 450 4MATIC AMG Line","price":114600000,"disp":"2999cc","cat":"E-Class"},{"name":"E 450 4MATIC EXCLUSIVE","price":128200000,"disp":"2999cc","cat":"E-Class"},{"name":"AMG E 53 HYBRID 4MATIC+","price":141600000,"disp":"2999cc","cat":"E-Class"},{"name":"AMG E 53 HYBRID 4MATIC+ (Edition)","price":147000000,"disp":"2999cc","cat":"E-Class"},{"name":"S 350 d 4MATIC","price":152600000,"disp":"2925cc","cat":"S-Class · Maybach"},{"name":"S 350 d 4MATIC (CY25/2)","price":153600000,"disp":"2925cc","cat":"S-Class · Maybach"},{"name":"S 450 4MATIC","price":159600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 450 4MATIC (CY25/2)","price":160600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 450 4MATIC Long","price":191600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 450 4MATIC Long (CY25/2)","price":193600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 500 4MATIC Long","price":213600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 500 4MATIC Long (CY25/2)","price":215600000,"disp":"2999cc","cat":"S-Class · Maybach"},{"name":"S 580 4MATIC Long","price":258600000,"disp":"3982cc","cat":"S-Class · Maybach"},{"name":"AMG S 63 E Performance","price":297600000,"disp":"3982cc","cat":"S-Class · Maybach"},{"name":"Maybach S 580","price":315600000,"disp":"3982cc","cat":"S-Class · Maybach"},{"name":"Maybach S 680","price":401600000,"disp":"5982cc","cat":"S-Class · Maybach"},{"name":"Maybach S 680 \"V12 Edition\"","price":478000000,"disp":"5982cc","cat":"S-Class · Maybach"},{"name":"AMG SL 43","price":158600000,"disp":"1991cc","cat":"S-Class · Maybach"},{"name":"AMG SL 63 4MATIC+","price":248600000,"disp":"3982cc","cat":"S-Class · Maybach"},{"name":"Maybach SL 680","price":342600000,"disp":"3982cc","cat":"S-Class · Maybach"},{"name":"AMG GT 55 4MATIC+","price":208600000,"disp":"3982cc","cat":"SL · AMG GT"},{"name":"AMG GT 63 S E Performance","price":278600000,"disp":"3982cc","cat":"SL · AMG GT"},{"name":"AMG GT 43 4MATIC+","price":162600000,"disp":"1991cc","cat":"SL · AMG GT"},{"name":"GLC 220 d 4MATIC","price":81200000,"disp":"1993cc","cat":"GLC"},{"name":"GLC 300 4MATIC AVANTGARDE","price":81400000,"disp":"1999cc","cat":"GLC"},{"name":"GLC 300 4MATIC AMG Line","price":91400000,"disp":"1999cc","cat":"GLC"},{"name":"AMG GLC 43 4MATIC","price":102300000,"disp":"1991cc","cat":"GLC"},{"name":"GLC 300 4MATIC Coupe AVANTGARDE","price":85500000,"disp":"1999cc","cat":"GLC"},{"name":"GLC 300 4MATIC Coupe AMG Line","price":95700000,"disp":"1999cc","cat":"GLC"},{"name":"AMG GLC 43 4MATIC Coupe","price":106900000,"disp":"1991cc","cat":"GLC"},{"name":"GLE 300 d 4MATIC","price":117800000,"disp":"1993cc","cat":"GLE"},{"name":"GLE 350 4MATIC","price":116600000,"disp":"1999cc","cat":"GLE"},{"name":"GLE 450 4MATIC","price":127600000,"disp":"2999cc","cat":"GLE"},{"name":"GLE 450 4MATIC AMG Line","price":137600000,"disp":"2999cc","cat":"GLE"},{"name":"AMG GLE 53 4MATIC+","price":164600000,"disp":"2999cc","cat":"GLE"},{"name":"GLE 450 d 4MATIC Coupe AMG Line","price":132600000,"disp":"2925cc","cat":"GLE"},{"name":"GLE 450 4MATIC Coupe AMG Line","price":141100000,"disp":"2999cc","cat":"GLE"},{"name":"AMG GLE 53 4MATIC+ Coupe","price":168600000,"disp":"2999cc","cat":"GLE"},{"name":"GLS 450 d 4MATIC AMG Line","price":152600000,"disp":"2925cc","cat":"GLS"},{"name":"GLS 450 4MATIC AMG Line","price":152600000,"disp":"2999cc","cat":"GLS"},{"name":"GLS 450 d 4MATIC AMG Line Premium","price":157100000,"disp":"2925cc","cat":"GLS"},{"name":"GLS 450 4MATIC AMG Line Premium","price":157100000,"disp":"2999cc","cat":"GLS"},{"name":"GLS 580 4MATIC AMG Line","price":192000000,"disp":"3982cc","cat":"GLS"},{"name":"Maybach GLS 600","price":293600000,"disp":"3982cc","cat":"GLS"},{"name":"Maybach GLS 600 MANUFAKTUR","price":335600000,"disp":"3982cc","cat":"GLS"},{"name":"AMG GLS 63 4MATIC+","price":208600000,"disp":"3982cc","cat":"GLS"},{"name":"G 450 d","price":193500000,"disp":"2925cc","cat":"G-Class"},{"name":"G 450 d MANUFAKTUR","price":217700000,"disp":"2925cc","cat":"G-Class"},{"name":"AMG G 63","price":261200000,"disp":"3982cc","cat":"G-Class"},{"name":"AMG G 63 MANUFAKTUR","price":288400000,"disp":"3982cc","cat":"G-Class"},{"name":"G 580 with EQ Technology","price":214700000,"disp":"EV","cat":"G-Class"},{"name":"EQA 250 Progressive","price":70000000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQA 250 AMG Line","price":75800000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQB 300 4MATIC Progressive","price":78800000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQB 300 4MATIC AMG Line","price":84300000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQE 350+ SUV","price":106000000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQE 500 4MATIC SUV","price":140800000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQE 350+","price":110000000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQS 450 4MATIC SUV","price":164600000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"EQS 580 4MATIC SUV","price":190600000,"disp":"EV","cat":"전기차 (EQ)"},{"name":"Maybach EQS 680 SUV","price":233600000,"disp":"EV","cat":"전기차 (EQ)"}];
+const DATA = [{"name": "AMG A 45 S 4MATIC+ [MY27·개소세5%]", "price": 82300000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "GLA 250 4MATIC AMG Line [MY27·개소세5%]", "price": 70800000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "EQA 250 Progressive [MY27·개소세5%]", "price": 70800000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQA 250 AMG Line [MY27·개소세5%]", "price": 76700000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "S 350 d 4MATIC [MY27·개소세5%]", "price": 154000000, "disp": "2925cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC [MY27·개소세5%]", "price": 162400000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC Long Exclusive [MY27·개소세5%]", "price": 175400000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC Long AMG Line [MY27·개소세5%]", "price": 195400000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 500 4MATIC Long [MY27·개소세5%]", "price": 220000000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 580 4MATIC Long [MY27·개소세5%]", "price": 270000000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 580 [MY27·개소세5%]", "price": 317000000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 580 MANUFAKTUR [MY27·개소세5%]", "price": 336000000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 680 [MY27·개소세5%]", "price": 407000000, "disp": "5982cc", "cat": "S-Class · Maybach"}, {"name": "A 220", "price": 48100000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "AMG A 45 S 4MATIC+", "price": 80400000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "A 220 Sedan", "price": 49900000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "AMG A 35 4MATIC", "price": 67700000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "CLA 250 4MATIC AMG Line", "price": 63700000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "AMG CLA 45 S 4MATIC+", "price": 90600000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "AMG CLA 45 S 4MATIC+ Final Edition", "price": 95800000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "GLA 250 4MATIC AMG Line", "price": 69100000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "GLB 200 d", "price": 63300000, "disp": "1950cc", "cat": "A · CLA · GLA · GLB"}, {"name": "GLB 250 4MATIC", "price": 71100000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "AMG GLB 35 4MATIC", "price": 78500000, "disp": "1991cc", "cat": "A · CLA · GLA · GLB"}, {"name": "C 200 AVANTGARDE", "price": 64300000, "disp": "1991cc", "cat": "C · CLE"}, {"name": "C 200 AMG Line", "price": 67500000, "disp": "1991cc", "cat": "C · CLE"}, {"name": "CLE 200 Coupe AMG Line", "price": 75700000, "disp": "1991cc", "cat": "C · CLE"}, {"name": "CLE 450 4MATIC Coupe AMG Line", "price": 98400000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "AMG CLE 53 4MATIC+ Coupe", "price": 107700000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "AMG CLE 53 4MATIC+ Coupe Limited Edition", "price": 131300000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "CLE 200 Cabriolet AMG Line", "price": 82100000, "disp": "1991cc", "cat": "C · CLE"}, {"name": "CLE 450 4MATIC Cabriolet AMG Line", "price": 102600000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "AMG CLE 53 4MATIC+ Cabriolet", "price": 113600000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "AMG CLE 53 4MATIC+ Cabriolet Limited Edition", "price": 137300000, "disp": "2999cc", "cat": "C · CLE"}, {"name": "E 200 AVANTGARDE", "price": 76500000, "disp": "1991cc", "cat": "E-Class"}, {"name": "E 200 EXCLUSIVE", "price": 76600000, "disp": "1991cc", "cat": "E-Class"}, {"name": "E 200 AMG Line", "price": 80000000, "disp": "1991cc", "cat": "E-Class"}, {"name": "E 220 d 4MATIC EXCLUSIVE", "price": 86100000, "disp": "1993cc", "cat": "E-Class"}, {"name": "E 300 4MATIC EXCLUSIVE", "price": 93600000, "disp": "1999cc", "cat": "E-Class"}, {"name": "E 300 4MATIC AMG Line", "price": 97700000, "disp": "1999cc", "cat": "E-Class"}, {"name": "E 350 e 4MATIC EXCLUSIVE", "price": 98700000, "disp": "1999cc", "cat": "E-Class"}, {"name": "E 450 4MATIC AMG Line", "price": 114600000, "disp": "2999cc", "cat": "E-Class"}, {"name": "E 450 4MATIC EXCLUSIVE", "price": 128200000, "disp": "2999cc", "cat": "E-Class"}, {"name": "AMG E 53 HYBRID 4MATIC+", "price": 141600000, "disp": "2999cc", "cat": "E-Class"}, {"name": "AMG E 53 HYBRID 4MATIC+ (Edition)", "price": 147000000, "disp": "2999cc", "cat": "E-Class"}, {"name": "S 350 d 4MATIC", "price": 152600000, "disp": "2925cc", "cat": "S-Class · Maybach"}, {"name": "S 350 d 4MATIC (CY25/2)", "price": 153600000, "disp": "2925cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC", "price": 159600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC (CY25/2)", "price": 160600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC Long", "price": 191600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 450 4MATIC Long (CY25/2)", "price": 193600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 500 4MATIC Long", "price": 213600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 500 4MATIC Long (CY25/2)", "price": 215600000, "disp": "2999cc", "cat": "S-Class · Maybach"}, {"name": "S 580 4MATIC Long", "price": 258600000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "AMG S 63 E Performance", "price": 297600000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 580", "price": 315600000, "disp": "3982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 680", "price": 401600000, "disp": "5982cc", "cat": "S-Class · Maybach"}, {"name": "Maybach S 680 \"V12 Edition\"", "price": 478000000, "disp": "5982cc", "cat": "S-Class · Maybach"}, {"name": "AMG SL 43", "price": 158600000, "disp": "1991cc", "cat": "SL · AMG GT"}, {"name": "AMG SL 63 4MATIC+", "price": 248600000, "disp": "3982cc", "cat": "SL · AMG GT"}, {"name": "Maybach SL 680", "price": 342600000, "disp": "3982cc", "cat": "SL · AMG GT"}, {"name": "AMG GT 43", "price": 148100000, "disp": "1991cc", "cat": "SL · AMG GT"}, {"name": "AMG GT 55 4MATIC+", "price": 208600000, "disp": "3982cc", "cat": "SL · AMG GT"}, {"name": "AMG GT 63 S E Performance", "price": 278600000, "disp": "3982cc", "cat": "SL · AMG GT"}, {"name": "AMG GT 43 4MATIC+", "price": 162600000, "disp": "1991cc", "cat": "SL · AMG GT"}, {"name": "GLC 220 d 4MATIC", "price": 81200000, "disp": "1993cc", "cat": "GLC"}, {"name": "GLC 300 4MATIC AVANTGARDE", "price": 81400000, "disp": "1999cc", "cat": "GLC"}, {"name": "GLC 300 4MATIC AMG Line", "price": 91400000, "disp": "1999cc", "cat": "GLC"}, {"name": "AMG GLC 43 4MATIC", "price": 102300000, "disp": "1991cc", "cat": "GLC"}, {"name": "GLC 300 4MATIC Coupe AVANTGARDE", "price": 85500000, "disp": "1999cc", "cat": "GLC"}, {"name": "GLC 300 4MATIC Coupe AMG Line", "price": 95700000, "disp": "1999cc", "cat": "GLC"}, {"name": "AMG GLC 43 4MATIC Coupe", "price": 106900000, "disp": "1991cc", "cat": "GLC"}, {"name": "GLE 300 d 4MATIC", "price": 117800000, "disp": "1993cc", "cat": "GLE"}, {"name": "GLE 350 4MATIC", "price": 116600000, "disp": "1999cc", "cat": "GLE"}, {"name": "GLE 450 4MATIC", "price": 127600000, "disp": "2999cc", "cat": "GLE"}, {"name": "GLE 450 4MATIC AMG Line", "price": 137600000, "disp": "2999cc", "cat": "GLE"}, {"name": "AMG GLE 53 4MATIC+", "price": 164600000, "disp": "2999cc", "cat": "GLE"}, {"name": "GLE 450 d 4MATIC Coupe AMG Line", "price": 132600000, "disp": "2925cc", "cat": "GLE"}, {"name": "GLE 450 4MATIC Coupe AMG Line", "price": 141100000, "disp": "2999cc", "cat": "GLE"}, {"name": "AMG GLE 53 4MATIC+ Coupe", "price": 168600000, "disp": "2999cc", "cat": "GLE"}, {"name": "GLS 450 d 4MATIC AMG Line", "price": 152600000, "disp": "2925cc", "cat": "GLS"}, {"name": "GLS 450 4MATIC AMG Line", "price": 152600000, "disp": "2999cc", "cat": "GLS"}, {"name": "GLS 450 d 4MATIC AMG Line Premium", "price": 157100000, "disp": "2925cc", "cat": "GLS"}, {"name": "GLS 450 4MATIC AMG Line Premium", "price": 157100000, "disp": "2999cc", "cat": "GLS"}, {"name": "GLS 580 4MATIC AMG Line", "price": 192000000, "disp": "3982cc", "cat": "GLS"}, {"name": "Maybach GLS 600", "price": 293600000, "disp": "3982cc", "cat": "GLS"}, {"name": "Maybach GLS 600 MANUFAKTUR", "price": 335600000, "disp": "3982cc", "cat": "GLS"}, {"name": "AMG GLS 63 4MATIC+", "price": 208600000, "disp": "3982cc", "cat": "GLS"}, {"name": "G 450 d", "price": 193500000, "disp": "2925cc", "cat": "G-Class"}, {"name": "G 450 d MANUFAKTUR", "price": 217700000, "disp": "2925cc", "cat": "G-Class"}, {"name": "AMG G 63", "price": 261200000, "disp": "3982cc", "cat": "G-Class"}, {"name": "AMG G 63 MANUFAKTUR", "price": 288400000, "disp": "3982cc", "cat": "G-Class"}, {"name": "G 580 with EQ Technology", "price": 214700000, "disp": "EV", "cat": "G-Class"}, {"name": "EQA 250 Progressive", "price": 70000000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQA 250 AMG Line", "price": 75800000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQB 300 4MATIC Progressive", "price": 78800000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQB 300 4MATIC AMG Line", "price": 84300000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQE 350+ SUV", "price": 106000000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQE 500 4MATIC SUV", "price": 140800000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQE 350+", "price": 110000000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQS 450 4MATIC SUV", "price": 164600000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "EQS 580 4MATIC SUV", "price": 190600000, "disp": "EV", "cat": "전기차 (EQ)"}, {"name": "Maybach EQS 680 SUV", "price": 233600000, "disp": "EV", "cat": "전기차 (EQ)"}];
 const REGIONS = [
   ["(서울)2000CC 미만",0.12],["(서울)2000CC 이상",0.20],["(서울)SUV",0.05],
   ["(경기)2000CC 미만",0.08],["(경기)2000CC 이상",0.12],["(경기)SUV-2000CC미만",0.08],
   ["(경기)SUV-2000CC이상",0.12],["(마산)승용-2000cc 이상",0.05]
 ];
-const YEARS = ["MY 2026","MY 2025","MY 2024"];
+const YEARS = ["MY 2027","MY 2026","MY 2025","MY 2024"];
 const COLORS = ["197 - Obsidian black","775 - Iridium silver","149 - Polar white","755 - Tenorite grey","799 - Diamond white","890 - Cavansite blue","992 - Selenite grey"];
 const INTERIORS = ["Black","Brown","Beige"];
 const won = n => Math.round(n).toLocaleString('ko-KR');
@@ -236,6 +259,7 @@ const regSel=document.getElementById('region');
 REGIONS.forEach((r,i)=>{const o=document.createElement('option');o.value=i;o.textContent=r[0];regSel.appendChild(o);});
 regSel.value=7;
 const ySel=document.getElementById('year');YEARS.forEach(y=>{const o=document.createElement('option');o.textContent=y;ySel.appendChild(o);});
+ySel.value='MY 2026';
 const cSel=document.getElementById('color');COLORS.forEach(c=>{const o=document.createElement('option');o.textContent=c;cSel.appendChild(o);});
 const iSel=document.getElementById('interior');INTERIORS.forEach(c=>{const o=document.createElement('option');o.textContent=c;iSel.appendChild(o);});
 
@@ -290,12 +314,12 @@ function calc(){
   document.getElementById(id).addEventListener('change',calc);
 });
 function resetForm(){
-  carSel.value=0; regSel.value=7; ySel.value=YEARS[0]; cSel.value=COLORS[0]; iSel.value=INTERIORS[0];
+  carSel.value=0; regSel.value=7; ySel.value='MY 2026'; cSel.value=COLORS[0]; iSel.value=INTERIORS[0];
   document.getElementById('promo').value=12; document.getElementById('bonddc').value=17.8;
   document.getElementById('taxfreeChk').checked=false; optEl.value='0'; calc();
 }
 const d=new Date();
-document.getElementById('today').textContent='MY26 · 견적일 '+d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+document.getElementById('today').textContent='MY26/27 · 견적일 '+d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
 
 const SELLER_KEY='benz_seller_info';
 function loadSeller(){
@@ -331,6 +355,47 @@ function saveSeller(){
   closeSeller();
 }
 loadSeller();
+
+function isInApp(){
+  var ua=(navigator.userAgent||'').toLowerCase();
+  return /kakaotalk|naver|line|instagram|fban|fbav|daumapps|whale|everytimeapp|band/.test(ua);
+}
+function doPrint(){
+  if(isInApp()){
+    var ua=(navigator.userAgent||'').toLowerCase();
+    if(/android/.test(ua)){
+      try{
+        var url=location.href;
+        location.href='intent://'+url.replace(/^https?:\/\//,'')+'#Intent;scheme=https;package=com.android.chrome;end';
+        setTimeout(function(){ openBrowserModal(); }, 800);
+        return;
+      }catch(e){}
+    }
+    openBrowserModal();
+    return;
+  }
+  printWithYear();
+}
+var _savedYear=null;
+function printWithYear(){
+  var car=DATA[+carSel.value];
+  _savedYear=ySel.value;
+  if(car && /개소세5%|MY27/.test(car.name)){ ySel.value='MY 2027'; }
+  window.print();
+}
+window.addEventListener('afterprint',function(){
+  if(_savedYear!==null){ ySel.value=_savedYear; _savedYear=null; }
+});
+function openBrowserModal(){ document.getElementById('browserModal').style.display='flex'; }
+function closeBrowserModal(){ document.getElementById('browserModal').style.display='none'; }
+function copyUrl(ev){
+  var url=location.href;
+  var btn=(ev&&ev.target)?ev.target:null;
+  function done(){ if(btn){ btn.textContent='복사됨!'; setTimeout(function(){ btn.textContent='주소 복사'; },1500); } }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done).catch(function(){ prompt('아래 주소를 복사하세요',url); });
+  }else{ prompt('아래 주소를 복사하세요',url); }
+}
 calc();
 </script>
 </body>
