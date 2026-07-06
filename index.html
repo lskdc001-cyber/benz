@@ -140,12 +140,52 @@
     </div>
   </div>
 
-  <div class="grid g2">
-    <div class="no-print">
-      <label class="fld">프로모션 할인율 (%)</label>
-      <input type="number" id="promo" value="12" min="0" max="30" step="0.5">
+  <div class="no-print" style="margin-top:8px; border:1px solid var(--line,#e2e6ea); border-radius:10px; padding:10px 12px;">
+    <label class="fld" style="font-weight:700; font-size:12px;">할인 프로그램 · 프로그램 중복 Matrix (합산 적용)</label>
+
+    <div class="grid g2" style="margin-top:6px;">
+      <div>
+        <label class="fld">① 현금 할인 (%) · 계산서</label>
+        <input type="number" id="promo" value="12" min="0" max="30" step="0.5">
+      </div>
+      <div>
+        <label class="fld">기본 캠페인 옵션</label>
+        <label class="chk" style="margin-top:6px;"><input type="checkbox" id="extwarranty"> ①-2 Extended Warranty (EQ·MM/S)</label>
+      </div>
     </div>
-    <div></div>
+
+    <div class="grid g2" style="margin-top:8px;">
+      <div><label class="fld">③ Fleet (%) · Stackable</label><input type="number" id="fleet" value="0" min="0" max="30" step="0.5"></div>
+      <div></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:8px;">
+      <div>
+        <label class="fld">④ Cash Retention (재구매 · 택1)</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:6px;">
+          <label class="chk"><input type="checkbox" id="retTev"> TEV+ (+2%)</label>
+          <label class="chk"><input type="checkbox" id="retNon"> Non-TEV+ (+1%)</label>
+        </div>
+      </div>
+      <div>
+        <label class="fld">④-1 Trade-in / ⑤ Conquest (중복 가능)</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:6px;">
+          <label class="chk"><input type="checkbox" id="tradein"> Trade-in (+1%)</label>
+          <label class="chk"><input type="checkbox" id="conquest"> Conquest (+1% · GLC·GLE)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top:8px;">
+      <div>
+        <label class="fld">EXTRA 할인</label>
+        <div style="display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:6px;">
+          <label class="chk"><input type="checkbox" id="repairhist"> ⑥ Repair History (+1%)</label>
+          <label class="chk"><input type="checkbox" id="highmile"> ⑦ High Mileage (+1%)</label>
+        </div>
+      </div>
+      <div id="discHint" style="font-size:11px; color:var(--hint); align-self:flex-end; line-height:1.5;"></div>
+    </div>
   </div>
 
   <div class="metrics">
@@ -164,7 +204,7 @@
             <td><label class="chk"><input type="checkbox" id="taxfreeChk"> 면세할인 적용</label></td>
             <td class="val" id="d-taxfree">—</td>
           </tr>
-          <tr><td class="lbl">프로모션 <span id="d-promorate" style="color:var(--hint)"></span></td><td class="val" id="d-promo" style="color:var(--success)">—</td></tr>
+          <tr><td class="lbl">할인 <span id="d-promorate" style="color:var(--hint)"></span></td><td class="val" id="d-promo" style="color:var(--success)">—</td></tr>
           <tr>
             <td class="lbl">옵션가</td>
             <td class="val"><span class="optbox"><input type="text" id="opt" class="inlineN" inputmode="numeric" value="0"><span class="lbl">원</span></span></td>
@@ -316,13 +356,24 @@ function calc(){
   const car=DATA[+carSel.value];
   const price=car.price;
   const opt=optVal();
-  const promoRate=(+document.getElementById('promo').value||0)/100;
+  const cashRate=(+document.getElementById('promo').value||0)/100;
+  const fleetRate=(+document.getElementById('fleet').value||0)/100;
+  const retention=(document.getElementById('retTev').checked?0.02:0)+(document.getElementById('retNon').checked?0.01:0);
+  const isGLCGLE=/GLC|GLE/.test(car.cat||'');
+  const tradeinRate=document.getElementById('tradein').checked?0.01:0;
+  const conquestOn=document.getElementById('conquest').checked;
+  const conquestRate=conquestOn?0.01:0;
+  const conquestWarn=conquestOn&&!isGLCGLE;
+  const repairHist=document.getElementById('repairhist').checked?0.01:0;
+  const highMile=document.getElementById('highmile').checked?0.01:0;
+  const extraRate=fleetRate+retention+tradeinRate+conquestRate+repairHist+highMile;
+  const discRate=cashRate+extraRate;
   const bondDc=(+document.getElementById('bonddc').value||0)/100;
   const bondRate=REGIONS[+regSel.value][1];
   const taxfreeOn=document.getElementById('taxfreeChk').checked;
 
   const taxfree = taxfreeOn ? Math.round(price/1.1*0.10) : 0;
-  const promo=Math.round((price+opt)*promoRate);
+  const promo=Math.round((price+opt)*discRate);
   const buyTotal=price - (taxfree+promo) + opt;
   const acq=Math.round(buyTotal/1.1*0.07);
   const bond=Math.round(buyTotal/1.1*bondRate*bondDc);
@@ -338,21 +389,46 @@ function calc(){
   if(taxfreeOn){ tf.textContent='-'+won(taxfree); tf.style.color='var(--success)'; }
   else { tf.textContent='미적용'; tf.style.color='var(--hint)'; }
   document.getElementById('d-promo').textContent='-'+won(promo);
-  document.getElementById('d-promorate').textContent='('+(promoRate*100).toFixed(1)+'%)';
+  let _parts=['현금 '+(cashRate*100).toFixed(1)+'%'];
+  if(fleetRate) _parts.push('Fleet '+(fleetRate*100).toFixed(1)+'%');
+  if(retention) _parts.push('재구매 '+(retention*100).toFixed(0)+'%');
+  if(tradeinRate) _parts.push('Trade-in 1%');
+  if(conquestRate) _parts.push('Conquest 1%');
+  if(repairHist) _parts.push('Repair History 1%');
+  if(highMile) _parts.push('High Mileage 1%');
+  document.getElementById('d-promorate').textContent = extraRate>0
+    ? '('+_parts.join(' + ')+' = '+(discRate*100).toFixed(1)+'%)'
+    : '('+(discRate*100).toFixed(1)+'%)';
+  let _hints=[];
+  if(conquestWarn) _hints.push('<span style="color:#d32f2f; font-weight:700;">⚠ Conquest는 GLC·GLE 차종만 적용 대상입니다 (현재 차종 비해당)</span>');
+  if(document.getElementById('extwarranty').checked) _hints.push('※ Extended Warranty 포함 (가격 영향 없음)');
+  document.getElementById('discHint').innerHTML=_hints.join('  /  ');
   document.getElementById('d-buytotal').textContent=won(buyTotal);
   document.getElementById('d-acq').textContent=won(acq);
   document.getElementById('d-bond').textContent = (bondRate===0) ? '면제' : won(bond);
   document.getElementById('d-regtotal').textContent=won(regTotal);
   document.getElementById('grand').textContent=won(grand)+'원';
 }
-['car','region','year','color','interior','promo','bonddc','taxfreeChk'].forEach(id=>{
+['car','region','year','color','interior','promo','bonddc','taxfreeChk','fleet','retTev','retNon','tradein','conquest','repairhist','highmile','extwarranty'].forEach(id=>{
   document.getElementById(id).addEventListener('input',calc);
   document.getElementById(id).addEventListener('change',calc);
 });
+// ④ 재구매: TEV+ / Non-TEV+ 상호배타 (중복 불가)
+document.getElementById('retTev').addEventListener('change',function(){ if(this.checked) document.getElementById('retNon').checked=false; });
+document.getElementById('retNon').addEventListener('change',function(){ if(this.checked) document.getElementById('retTev').checked=false; });
 function resetForm(){
   carSel.value=0; regSel.value=1; ySel.value='MY 2026'; cSel.value=COLORS[0]; iSel.value=INTERIORS[0];
   document.getElementById('promo').value=12; document.getElementById('bonddc').value=17.8;
-  document.getElementById('taxfreeChk').checked=false; optEl.value='0'; calc();
+  document.getElementById('taxfreeChk').checked=false;
+  document.getElementById('fleet').value=0;
+  document.getElementById('retTev').checked=false;
+  document.getElementById('retNon').checked=false;
+  document.getElementById('tradein').checked=false;
+  document.getElementById('conquest').checked=false;
+  document.getElementById('repairhist').checked=false;
+  document.getElementById('highmile').checked=false;
+  document.getElementById('extwarranty').checked=false;
+  optEl.value='0'; calc();
 }
 const d=new Date();
 document.getElementById('today').textContent='MY26/27 · 개소세5% · 견적일 '+d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
