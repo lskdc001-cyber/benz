@@ -212,6 +212,7 @@
         <div style="display:flex; flex-wrap:wrap; gap:8px 16px; margin-top:6px;">
           <label class="chk"><input type="checkbox" id="repairhist"> ⑥ Repair History (+1%)</label>
           <label class="chk"><input type="checkbox" id="highmile"> ⑦ High Mileage (+1%)</label>
+          <label class="chk"><input type="checkbox" id="sme"> ⑧ S-Class SME (+2%)</label>
         </div>
       </div>
       <div id="discHint" style="font-size:11px; color:var(--hint); align-self:flex-end; line-height:1.5;"></div>
@@ -401,7 +402,11 @@ function calc(){
   const conquestWarn=conquestOn&&!isGLCGLE;
   const repairHist=document.getElementById('repairhist').checked?0.01:0;
   const highMile=document.getElementById('highmile').checked?0.01:0;
-  const extraRate=fleetRate+retention+tradeinRate+conquestRate+repairHist+highMile;
+  const isSClass=/S-Class/.test(car.cat||'');
+  const smeOn=document.getElementById('sme').checked;
+  const smeRate=smeOn?0.02:0;
+  const smeWarn=smeOn&&!isSClass;
+  const extraRate=fleetRate+retention+tradeinRate+conquestRate+repairHist+highMile+smeRate;
   const discRate=cashRate+extraRate;
   const bondDc=(+document.getElementById('bonddc').value||0)/100;
   const bondRate=REGIONS[+regSel.value][1];
@@ -431,11 +436,13 @@ function calc(){
   if(conquestRate) _parts.push('Conquest 1%');
   if(repairHist) _parts.push('Repair History 1%');
   if(highMile) _parts.push('High Mileage 1%');
+  if(smeRate) _parts.push('S-Class SME 2%');
   document.getElementById('d-promorate').textContent = extraRate>0
     ? '('+_parts.join(' + ')+' = '+(discRate*100).toFixed(1)+'%)'
     : '('+(discRate*100).toFixed(1)+'%)';
   let _hints=[];
   if(conquestWarn) _hints.push('<span style="color:#d32f2f; font-weight:700;">⚠ Conquest는 GLC·GLE 차종만 적용 대상입니다 (현재 차종 비해당)</span>');
+  if(smeWarn) _hints.push('<span style="color:#d32f2f; font-weight:700;">⚠ SME는 S-Class 차종만 적용 대상입니다 (현재 차종 비해당)</span>');
   if(document.getElementById('extwarranty').checked) _hints.push('※ Extended Warranty 포함 (가격 영향 없음)');
   document.getElementById('discHint').innerHTML=_hints.join('  /  ');
   document.getElementById('d-buytotal').textContent=won(buyTotal);
@@ -444,7 +451,7 @@ function calc(){
   document.getElementById('d-regtotal').textContent=won(regTotal);
   document.getElementById('grand').textContent=won(grand)+'원';
 }
-['car','region','year','color','interior','promo','bonddc','taxfreeChk','fleet','retTev','retNon','tradein','conquest','repairhist','highmile','extwarranty'].forEach(id=>{
+['car','region','year','color','interior','promo','bonddc','taxfreeChk','fleet','retTev','retNon','tradein','conquest','repairhist','highmile','sme','extwarranty'].forEach(id=>{
   document.getElementById(id).addEventListener('input',calc);
   document.getElementById(id).addEventListener('change',calc);
 });
@@ -462,6 +469,7 @@ function resetForm(){
   document.getElementById('conquest').checked=false;
   document.getElementById('repairhist').checked=false;
   document.getElementById('highmile').checked=false;
+  document.getElementById('sme').checked=false;
   document.getElementById('extwarranty').checked=false;
   optEl.value='0'; calc();
 }
