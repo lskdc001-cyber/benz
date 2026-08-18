@@ -261,6 +261,33 @@ footer .cp{font-size:11px;color:#7d8489;margin-top:16px;line-height:1.6;}
     </select>
     <div class="pricebox"><em>권장 소비자 가격 (부가세 포함)</em><b id="pv">—</b></div>
     <div class="hint">2026.08.13 기준 · 개별소비세 5% 적용가입니다. 선택 옵션·프로모션에 따라 실구매가는 달라집니다.</div>
+    <div class="grid2">
+      <div>
+        <label class="f" for="color">외장 컬러</label>
+        <select id="color">
+          <option>상담 시 결정</option>
+          <option>옵시디안 블랙 (197)</option>
+          <option>폴라 화이트 (149)</option>
+          <option>다이아몬드 화이트 (799)</option>
+          <option>이리듐 실버 (775)</option>
+          <option>셀레나이트 그레이 (992)</option>
+          <option>테노라이트 그레이 (755)</option>
+          <option>카반사이트 블루 (890)</option>
+          <option>기타 (요청사항에 기재)</option>
+        </select>
+      </div>
+      <div>
+        <label class="f" for="interior">내장 시트</label>
+        <select id="interior">
+          <option>상담 시 결정</option>
+          <option>블랙</option>
+          <option>브라운</option>
+          <option>베이지</option>
+          <option>기타 (요청사항에 기재)</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint">색상은 모델·트림별로 선택 가능 범위가 다릅니다. 상담 시 실제 출고 가능 조합을 안내드립니다.</div>
     <label class="f" for="timing">희망 출고 시기</label>
     <select id="timing">
       <option>가능한 빠르게</option><option>1개월 이내</option><option>3개월 이내</option>
@@ -440,6 +467,8 @@ function payload(){
     model: $('car').value,
     carGroup: carGroup($('car').value),
     price: o ? (o.getAttribute('data-price')||'') : '',
+    color: $('color').value,
+    interior: $('interior').value,
     timing: $('timing').value,
     payType: p,
     term: p==='현금' ? '' : $('term').value,
@@ -496,6 +525,8 @@ function summary(){
   var o=$('car').options[$('car').selectedIndex], pr=o?o.getAttribute('data-price'):null;
   L.push('· 차종 : '+($('car').value||''));
   if(pr) L.push('· 권장가 : '+won(pr)+'원');
+  L.push('· 외장 컬러 : '+$('color').value);
+  L.push('· 내장 시트 : '+$('interior').value);
   L.push('· 희망 출고 : '+$('timing').value);
   L.push('');
   L.push('■ 구매 방법');
@@ -511,7 +542,7 @@ function summary(){
   return L.join('\n');
 }
 function draw(){ $('pv2').textContent=summary(); }
-['cname','cmail','timing','term','prepayI','deposit','prepayL','region','memo','agree']
+['cname','cmail','color','interior','timing','term','prepayI','deposit','prepayL','region','memo','agree']
   .forEach(function(id){ $(id).addEventListener('input',draw); $(id).addEventListener('change',draw); });
 
 function check(){
