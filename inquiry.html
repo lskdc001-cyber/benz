@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>메르세데스-벤츠 견적 상담 신청 · 한성자동차 SC 이상군</title>
+<meta name="description" content="원하시는 차종과 구매 방법만 남겨주시면 담당 컨설턴트가 정확한 견적으로 연락드립니다.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{--bk:#0b0b0b;--sv:#a4aaae;--ln:#e2e4e5;--bg:#f4f5f6;--tx:#111;--sub:#6d7377;--er:#c8102e;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+color:var(--tx);background:var(--bg);line-height:1.5;-webkit-text-size-adjust:100%;}
+.wrap{max-width:620px;margin:0 auto;background:#fff;min-height:100vh;
+box-shadow:0 0 40px rgba(0,0,0,.06);}
+
+header{background:var(--bk);color:#fff;padding:26px 22px 22px;}
+header .bd{font-size:19px;font-weight:700;letter-spacing:.4px;}
+header .sb{font-size:10px;letter-spacing:3px;color:var(--sv);margin-top:4px;text-transform:uppercase;}
+header h1{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-top:18px;}
+header p{font-size:13px;color:#c9cdcf;margin-top:8px;line-height:1.6;}
+
+main{padding:22px;}
+.step{margin-bottom:26px;}
+.st{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--bk);
+padding-bottom:8px;margin-bottom:14px;}
+.st i{font-style:normal;width:20px;height:20px;background:var(--bk);color:#fff;border-radius:50%;
+font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.st b{font-size:15px;letter-spacing:-.3px;}
+
+label.f{display:block;font-size:12px;font-weight:700;color:var(--sub);margin:14px 0 6px;letter-spacing:-.2px;}
+label.f:first-of-type{margin-top:0;}
+label.f em{font-style:normal;color:var(--er);margin-left:3px;}
+input[type=text],input[type=tel],input[type=email],select,textarea{
+width:100%;font-family:inherit;font-size:15px;color:var(--tx);background:#fff;
+border:1px solid var(--ln);border-radius:4px;padding:12px 12px;appearance:none;-webkit-appearance:none;}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%236d7377' stroke-width='1.6' fill='none'/></svg>");
+background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--bk);}
+input.err,select.err{border-color:var(--er);background:#fff6f7;}
+textarea{min-height:82px;resize:vertical;}
+.hint{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.55;}
+
+.pill{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.pill label{position:relative;}
+.pill input{position:absolute;opacity:0;pointer-events:none;}
+.pill span{display:block;text-align:center;padding:13px 4px;font-size:14px;font-weight:700;
+border:1px solid var(--ln);border-radius:4px;cursor:pointer;background:#fff;transition:.15s;}
+.pill input:checked + span{background:var(--bk);color:#fff;border-color:var(--bk);}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sub{background:var(--bg);border-radius:5px;padding:14px 14px 16px;margin-top:14px;}
+.sub .t{font-size:11px;font-weight:700;letter-spacing:1.4px;color:var(--sub);margin-bottom:2px;}
+.hide{display:none;}
+
+.pricebox{display:flex;justify-content:space-between;align-items:baseline;
+border:1px solid var(--bk);padding:12px 14px;margin-top:10px;}
+.pricebox em{font-style:normal;font-size:11.5px;color:var(--sub);}
+.pricebox b{font-size:17px;letter-spacing:-.4px;}
+
+.agree{display:flex;gap:10px;align-items:flex-start;background:var(--bg);padding:14px;border-radius:5px;}
+.agree input{width:19px;height:19px;margin-top:1px;flex-shrink:0;accent-color:#0b0b0b;}
+.agree p{font-size:12px;color:var(--sub);line-height:1.6;}
+.agree b{color:var(--tx);}
+
+.preview{border:1px dashed var(--ln);border-radius:5px;padding:14px;background:#fcfcfc;
+font-size:13px;white-space:pre-wrap;color:#3c4144;line-height:1.75;min-height:60px;}
+
+.btns{display:grid;gap:9px;margin-top:14px;}
+button{font-family:inherit;font-size:15px;font-weight:700;padding:15px;border-radius:4px;
+border:1px solid var(--bk);cursor:pointer;letter-spacing:-.2px;}
+.b1{background:var(--bk);color:#fff;}
+.b2{background:#fff;color:var(--bk);}
+button:active{transform:translateY(1px);}
+.err-msg{color:var(--er);font-size:12.5px;font-weight:700;margin-top:10px;display:none;}
+.done{display:none;border:1px solid var(--bk);background:var(--bk);color:#fff;
+padding:16px;border-radius:4px;margin-top:12px;}
+.done b{font-size:15px;display:block;margin-bottom:6px;}
+.done p{font-size:13px;color:#c9cdcf;line-height:1.65;}
+.done a{color:#fff;}
+.alt{margin-top:22px;padding-top:16px;border-top:1px solid var(--ln);}
+.alt-t{font-size:11px;font-weight:700;letter-spacing:1.4px;color:var(--sub);margin-bottom:10px;}
+button:disabled{opacity:.5;}
+
+footer{background:var(--bk);color:#fff;padding:24px 22px 30px;margin-top:8px;}
+footer .ft{font-size:10px;letter-spacing:2.4px;color:var(--sv);text-transform:uppercase;}
+footer .nm{font-size:19px;font-weight:700;margin:8px 0 14px;letter-spacing:-.3px;}
+footer a{color:#fff;text-decoration:none;border-bottom:1px solid #4a4f52;}
+footer .rw{display:flex;gap:12px;font-size:13.5px;margin-bottom:8px;}
+footer .rw em{font-style:normal;color:var(--sv);font-size:11px;width:58px;flex-shrink:0;
+letter-spacing:1px;text-transform:uppercase;padding-top:3px;}
+footer .ad{border-top:1px solid #2a2d2f;margin-top:16px;padding-top:14px;}
+footer .ad div{display:flex;gap:12px;font-size:12.5px;color:#c9cdcf;margin-bottom:6px;}
+footer .ad em{font-style:normal;color:var(--sv);font-size:11px;width:58px;flex-shrink:0;}
+footer .cp{font-size:11px;color:#7d8489;margin-top:16px;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="bd">Mercedes-Benz</div>
+  <div class="sb">Hansung Motors</div>
+  <h1>견적 상담 신청</h1>
+  <p>관심 차종과 구매 방법만 남겨주시면, 담당 컨설턴트가 취득세·공채·등록비용까지 반영한
+     <b>정확한 실구매가 견적</b>을 준비해 연락드립니다.</p>
+</header>
+
+<main>
+
+  <div class="step">
+    <div class="st"><i>1</i><b>고객 정보</b></div>
+    <label class="f" for="cname">성함 <em>*</em></label>
+    <input type="text" id="cname" placeholder="홍길동" autocomplete="name">
+    <label class="f" for="cphone">연락처 <em>*</em></label>
+    <input type="tel" id="cphone" placeholder="010-0000-0000" inputmode="numeric" autocomplete="tel">
+    <label class="f" for="cmail">이메일 <em>*</em></label>
+    <input type="email" id="cmail" placeholder="name@example.com" inputmode="email" autocomplete="email">
+  </div>
+
+  <div class="step">
+    <div class="st"><i>2</i><b>관심 차종</b></div>
+    <label class="f" for="car">차종 선택 <em>*</em></label>
+    <select id="car">
+      <option value="">— 차종을 선택해 주세요 —</option>
+      <optgroup label="A-Class · CLA">
+<option value="A 220" data-price="48700000">A 220 · 48,700,000원</option>
+<option value="A 220 Sedan" data-price="50500000">A 220 Sedan · 50,500,000원</option>
+<option value="CLA 250 4MATIC AMG Line" data-price="64500000">CLA 250 4MATIC AMG Line · 64,500,000원</option>
+<option value="Mercedes-AMG A 35 4MATIC" data-price="68600000">Mercedes-AMG A 35 4MATIC · 68,600,000원</option>
+<option value="Mercedes-AMG A 45 S 4MATIC+" data-price="81400000">Mercedes-AMG A 45 S 4MATIC+ · 81,400,000원</option>
+<option value="Mercedes-AMG A 45 S 4MATIC+ (MY27)" data-price="82300000">Mercedes-AMG A 45 S 4MATIC+ (MY27) · 82,300,000원</option>
+<option value="Mercedes-AMG CLA 45 S 4MATIC+" data-price="91800000">Mercedes-AMG CLA 45 S 4MATIC+ · 91,800,000원</option>
+<option value="Mercedes-AMG CLA 45 S 4MATIC+ Final Edition" data-price="97000000">Mercedes-AMG CLA 45 S 4MATIC+ Final Edition · 97,000,000원</option>
+</optgroup>
+<optgroup label="C-Class · CLE">
+<option value="C 200 AVANTGARDE" data-price="65100000">C 200 AVANTGARDE · 65,100,000원</option>
+<option value="C 200 Final Edition" data-price="66300000">C 200 Final Edition · 66,300,000원</option>
+<option value="C 200 AMG Line" data-price="68300000">C 200 AMG Line · 68,300,000원</option>
+<option value="CLE 200 Coupe AMG Line" data-price="76700000">CLE 200 Coupe AMG Line · 76,700,000원</option>
+<option value="CLE 200 Coupe (MY27)" data-price="77600000">CLE 200 Coupe (MY27) · 77,600,000원</option>
+<option value="CLE 200 Cabriolet AMG Line" data-price="83100000">CLE 200 Cabriolet AMG Line · 83,100,000원</option>
+<option value="CLE 200 Cabriolet (MY27)" data-price="84100000">CLE 200 Cabriolet (MY27) · 84,100,000원</option>
+<option value="CLE 450 4MATIC Coupe AMG Line" data-price="99700000">CLE 450 4MATIC Coupe AMG Line · 99,700,000원</option>
+<option value="CLE 450 4MATIC Coupe (MY27)" data-price="100800000">CLE 450 4MATIC Coupe (MY27) · 100,800,000원</option>
+<option value="CLE 450 4MATIC Cabriolet AMG Line" data-price="104000000">CLE 450 4MATIC Cabriolet AMG Line · 104,000,000원</option>
+<option value="CLE 450 4MATIC Cabriolet (MY27)" data-price="105200000">CLE 450 4MATIC Cabriolet (MY27) · 105,200,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Coupe" data-price="109100000">Mercedes-AMG CLE 53 4MATIC+ Coupe · 109,100,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Coupe (MY27)" data-price="110600000">Mercedes-AMG CLE 53 4MATIC+ Coupe (MY27) · 110,600,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Cabriolet" data-price="115000000">Mercedes-AMG CLE 53 4MATIC+ Cabriolet · 115,000,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Cabriolet (MY27)" data-price="116600000">Mercedes-AMG CLE 53 4MATIC+ Cabriolet (MY27) · 116,600,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Coupe Limited Edition" data-price="132700000">Mercedes-AMG CLE 53 4MATIC+ Coupe Limited Edition · 132,700,000원</option>
+<option value="Mercedes-AMG CLE 53 4MATIC+ Cabriolet Limited Edition" data-price="138700000">Mercedes-AMG CLE 53 4MATIC+ Cabriolet Limited Edition · 138,700,000원</option>
+</optgroup>
+<optgroup label="E-Class">
+<option value="E 200 AVANTGARDE" data-price="77500000">E 200 AVANTGARDE · 77,500,000원</option>
+<option value="E 200 EXCLUSIVE" data-price="77500000">E 200 EXCLUSIVE · 77,500,000원</option>
+<option value="E 200 AMG Line" data-price="81000000">E 200 AMG Line · 81,000,000원</option>
+<option value="E 220 d 4MATIC EXCLUSIVE" data-price="87200000">E 220 d 4MATIC EXCLUSIVE · 87,200,000원</option>
+<option value="E 300 4MATIC EXCLUSIVE" data-price="94800000">E 300 4MATIC EXCLUSIVE · 94,800,000원</option>
+<option value="E 300 4MATIC AMG Line" data-price="99000000">E 300 4MATIC AMG Line · 99,000,000원</option>
+<option value="E 350 e 4MATIC EXCLUSIVE" data-price="100000000">E 350 e 4MATIC EXCLUSIVE · 100,000,000원</option>
+<option value="E 450 4MATIC AMG Line" data-price="116000000">E 450 4MATIC AMG Line · 116,000,000원</option>
+<option value="E 450 4MATIC EXCLUSIVE" data-price="129600000">E 450 4MATIC EXCLUSIVE · 129,600,000원</option>
+<option value="Mercedes-AMG E 53 HYBRID 4MATIC+" data-price="143000000">Mercedes-AMG E 53 HYBRID 4MATIC+ · 143,000,000원</option>
+<option value="Mercedes-AMG E 53 HYBRID 4MATIC+ (Edition)" data-price="148400000">Mercedes-AMG E 53 HYBRID 4MATIC+ (Edition) · 148,400,000원</option>
+</optgroup>
+<optgroup label="S-Class · Mercedes-Maybach">
+<option value="S 350 d 4MATIC (MY27)" data-price="154000000">S 350 d 4MATIC (MY27) · 154,000,000원</option>
+<option value="S 350 d 4MATIC (CY25/2)" data-price="155000000">S 350 d 4MATIC (CY25/2) · 155,000,000원</option>
+<option value="S 450 4MATIC" data-price="161000000">S 450 4MATIC · 161,000,000원</option>
+<option value="S 450 4MATIC (CY25/2)" data-price="162000000">S 450 4MATIC (CY25/2) · 162,000,000원</option>
+<option value="S 450 4MATIC (MY27)" data-price="162400000">S 450 4MATIC (MY27) · 162,400,000원</option>
+<option value="S 450 4MATIC Long Exclusive (MY27)" data-price="175400000">S 450 4MATIC Long Exclusive (MY27) · 175,400,000원</option>
+<option value="S 450 4MATIC Long" data-price="193000000">S 450 4MATIC Long · 193,000,000원</option>
+<option value="S 450 4MATIC Long (CY25/2)" data-price="195000000">S 450 4MATIC Long (CY25/2) · 195,000,000원</option>
+<option value="S 450 4MATIC Long AMG Line (MY27)" data-price="195400000">S 450 4MATIC Long AMG Line (MY27) · 195,400,000원</option>
+<option value="S 500 4MATIC Long" data-price="215000000">S 500 4MATIC Long · 215,000,000원</option>
+<option value="S 500 4MATIC Long (CY25/2)" data-price="217000000">S 500 4MATIC Long (CY25/2) · 217,000,000원</option>
+<option value="S 500 4MATIC Long (MY27)" data-price="220000000">S 500 4MATIC Long (MY27) · 220,000,000원</option>
+<option value="S 580 4MATIC Long" data-price="260000000">S 580 4MATIC Long · 260,000,000원</option>
+<option value="S 580 4MATIC Long (MY27)" data-price="270000000">S 580 4MATIC Long (MY27) · 270,000,000원</option>
+<option value="Mercedes-AMG S 63 E Performance" data-price="299000000">Mercedes-AMG S 63 E Performance · 299,000,000원</option>
+<option value="Mercedes-Maybach S 580 (MY27)" data-price="317000000">Mercedes-Maybach S 580 (MY27) · 317,000,000원</option>
+<option value="Mercedes-Maybach S 580 MANUFAKTUR (MY27)" data-price="336000000">Mercedes-Maybach S 580 MANUFAKTUR (MY27) · 336,000,000원</option>
+<option value="Mercedes-Maybach S 680" data-price="403000000">Mercedes-Maybach S 680 · 403,000,000원</option>
+<option value="Mercedes-Maybach S 680 (MY27)" data-price="407000000">Mercedes-Maybach S 680 (MY27) · 407,000,000원</option>
+<option value="Mercedes-Maybach S 680 &quot;V12 Edition&quot;" data-price="479400000">Mercedes-Maybach S 680 &quot;V12 Edition&quot; · 479,400,000원</option>
+</optgroup>
+<optgroup label="SL · AMG GT">
+<option value="Mercedes-AMG GT 43" data-price="149500000">Mercedes-AMG GT 43 · 149,500,000원</option>
+<option value="Mercedes-AMG SL 43" data-price="160000000">Mercedes-AMG SL 43 · 160,000,000원</option>
+<option value="Mercedes-AMG GT 43 4MATIC+" data-price="164000000">Mercedes-AMG GT 43 4MATIC+ · 164,000,000원</option>
+<option value="Mercedes-AMG GT 55 4MATIC+" data-price="210000000">Mercedes-AMG GT 55 4MATIC+ · 210,000,000원</option>
+<option value="Mercedes-AMG SL 63 4MATIC+" data-price="250000000">Mercedes-AMG SL 63 4MATIC+ · 250,000,000원</option>
+<option value="Mercedes-AMG GT 63 S E Performance" data-price="280000000">Mercedes-AMG GT 63 S E Performance · 280,000,000원</option>
+<option value="Mercedes-Maybach SL 680" data-price="344000000">Mercedes-Maybach SL 680 · 344,000,000원</option>
+</optgroup>
+<optgroup label="GLA · GLB">
+<option value="GLB 200 d" data-price="64300000">GLB 200 d · 64,300,000원</option>
+<option value="GLA 250 4MATIC AMG Line" data-price="70000000">GLA 250 4MATIC AMG Line · 70,000,000원</option>
+<option value="GLA 250 4MATIC AMG Line (MY27)" data-price="70800000">GLA 250 4MATIC AMG Line (MY27) · 70,800,000원</option>
+<option value="GLB 250 4MATIC" data-price="72000000">GLB 250 4MATIC · 72,000,000원</option>
+<option value="Mercedes-AMG GLB 35 4MATIC" data-price="79500000">Mercedes-AMG GLB 35 4MATIC · 79,500,000원</option>
+</optgroup>
+<optgroup label="GLC">
+<option value="GLC 220 d 4MATIC" data-price="82200000">GLC 220 d 4MATIC · 82,200,000원</option>
+<option value="GLC 300 4MATIC AVANTGARDE" data-price="82500000">GLC 300 4MATIC AVANTGARDE · 82,500,000원</option>
+<option value="GLC 300 4MATIC Coupe AVANTGARDE" data-price="86600000">GLC 300 4MATIC Coupe AVANTGARDE · 86,600,000원</option>
+<option value="GLC 300 4MATIC AMG Line electric (Launch Edition) (MY27)" data-price="90000000">GLC 300 4MATIC AMG Line electric (Launch Edition) (MY27) · 90,000,000원</option>
+<option value="GLC 300 4MATIC AMG Line" data-price="92500000">GLC 300 4MATIC AMG Line · 92,500,000원</option>
+<option value="GLC 300 4MATIC AMG Line+ electric (Launch Edition) (MY27)" data-price="94800000">GLC 300 4MATIC AMG Line+ electric (Launch Edition) (MY27) · 94,800,000원</option>
+<option value="GLC 300 4MATIC Coupe AMG Line" data-price="96900000">GLC 300 4MATIC Coupe AMG Line · 96,900,000원</option>
+<option value="Mercedes-AMG GLC 43 4MATIC" data-price="103600000">Mercedes-AMG GLC 43 4MATIC · 103,600,000원</option>
+<option value="Mercedes-AMG GLC 43 4MATIC Coupe" data-price="108300000">Mercedes-AMG GLC 43 4MATIC Coupe · 108,300,000원</option>
+</optgroup>
+<optgroup label="GLE">
+<option value="GLE 350 4MATIC" data-price="118000000">GLE 350 4MATIC · 118,000,000원</option>
+<option value="GLE 300 d 4MATIC" data-price="119200000">GLE 300 d 4MATIC · 119,200,000원</option>
+<option value="GLE 450 4MATIC" data-price="129000000">GLE 450 4MATIC · 129,000,000원</option>
+<option value="GLE 450 d 4MATIC Coupe AMG Line" data-price="134000000">GLE 450 d 4MATIC Coupe AMG Line · 134,000,000원</option>
+<option value="GLE 450 4MATIC AMG Line" data-price="139000000">GLE 450 4MATIC AMG Line · 139,000,000원</option>
+<option value="GLE 450 4MATIC Coupe AMG Line" data-price="142500000">GLE 450 4MATIC Coupe AMG Line · 142,500,000원</option>
+<option value="Mercedes-AMG GLE 53 4MATIC+" data-price="166000000">Mercedes-AMG GLE 53 4MATIC+ · 166,000,000원</option>
+<option value="Mercedes-AMG GLE 53 4MATIC+ Coupe" data-price="170000000">Mercedes-AMG GLE 53 4MATIC+ Coupe · 170,000,000원</option>
+</optgroup>
+<optgroup label="GLS">
+<option value="GLS 450 4MATIC AMG Line" data-price="154000000">GLS 450 4MATIC AMG Line · 154,000,000원</option>
+<option value="GLS 450 d 4MATIC AMG Line" data-price="154000000">GLS 450 d 4MATIC AMG Line · 154,000,000원</option>
+<option value="GLS 450 4MATIC AMG Line Premium" data-price="158500000">GLS 450 4MATIC AMG Line Premium · 158,500,000원</option>
+<option value="GLS 450 d 4MATIC AMG Line Premium" data-price="158500000">GLS 450 d 4MATIC AMG Line Premium · 158,500,000원</option>
+<option value="GLS 580 4MATIC AMG Line" data-price="193400000">GLS 580 4MATIC AMG Line · 193,400,000원</option>
+<option value="Mercedes-AMG GLS 63 4MATIC+" data-price="210000000">Mercedes-AMG GLS 63 4MATIC+ · 210,000,000원</option>
+<option value="Mercedes-Maybach GLS 600" data-price="295000000">Mercedes-Maybach GLS 600 · 295,000,000원</option>
+<option value="Mercedes-Maybach GLS 600 MANUFAKTUR" data-price="337000000">Mercedes-Maybach GLS 600 MANUFAKTUR · 337,000,000원</option>
+</optgroup>
+<optgroup label="G-Class">
+<option value="G 450 d" data-price="194900000">G 450 d · 194,900,000원</option>
+<option value="G 450 d (MY27)" data-price="199700000">G 450 d (MY27) · 199,700,000원</option>
+<option value="G 580 with EQ Technology" data-price="216100000">G 580 with EQ Technology · 216,100,000원</option>
+<option value="G 450 d MANUFAKTUR" data-price="219100000">G 450 d MANUFAKTUR · 219,100,000원</option>
+<option value="G 450 d MANUFAKTUR (MY27)" data-price="228200000">G 450 d MANUFAKTUR (MY27) · 228,200,000원</option>
+<option value="Mercedes-AMG G 63" data-price="262600000">Mercedes-AMG G 63 · 262,600,000원</option>
+<option value="Mercedes-AMG G 63 (MY27)" data-price="275000000">Mercedes-AMG G 63 (MY27) · 275,000,000원</option>
+<option value="Mercedes-AMG G 63 MANUFAKTUR" data-price="289800000">Mercedes-AMG G 63 MANUFAKTUR · 289,800,000원</option>
+<option value="Mercedes-AMG G 63 MANUFAKTUR (MY27)" data-price="301000000">Mercedes-AMG G 63 MANUFAKTUR (MY27) · 301,000,000원</option>
+</optgroup>
+<optgroup label="전기차 · EQ">
+<option value="EQA 250 Progressive" data-price="70000000">EQA 250 Progressive · 70,000,000원</option>
+<option value="EQA 250 Progressive (MY27)" data-price="70800000">EQA 250 Progressive (MY27) · 70,800,000원</option>
+<option value="EQA 250 AMG Line" data-price="75800000">EQA 250 AMG Line · 75,800,000원</option>
+<option value="EQA 250 AMG Line (MY27)" data-price="76700000">EQA 250 AMG Line (MY27) · 76,700,000원</option>
+<option value="EQB 300 4MATIC Progressive" data-price="78800000">EQB 300 4MATIC Progressive · 78,800,000원</option>
+<option value="EQB 300 4MATIC AMG Line" data-price="84300000">EQB 300 4MATIC AMG Line · 84,300,000원</option>
+<option value="EQE 350+ SUV" data-price="106000000">EQE 350+ SUV · 106,000,000원</option>
+<option value="EQE 350+" data-price="110000000">EQE 350+ · 110,000,000원</option>
+<option value="EQE 500 4MATIC SUV" data-price="141000000">EQE 500 4MATIC SUV · 141,000,000원</option>
+<option value="EQS 450 4MATIC SUV" data-price="166000000">EQS 450 4MATIC SUV · 166,000,000원</option>
+<option value="EQS 580 4MATIC SUV" data-price="192000000">EQS 580 4MATIC SUV · 192,000,000원</option>
+<option value="Mercedes-Maybach EQS 680 SUV" data-price="235000000">Mercedes-Maybach EQS 680 SUV · 235,000,000원</option>
+</optgroup>
+    </select>
+    <div class="pricebox"><em>권장 소비자 가격 (부가세 포함)</em><b id="pv">—</b></div>
+    <div class="hint">2026.08.13 기준 · 개별소비세 5% 적용가입니다. 선택 옵션·프로모션에 따라 실구매가는 달라집니다.</div>
+    <label class="f" for="timing">희망 출고 시기</label>
+    <select id="timing">
+      <option>가능한 빠르게</option><option>1개월 이내</option><option>3개월 이내</option>
+      <option>6개월 이내</option><option>아직 미정 (정보만 확인)</option>
+    </select>
+  </div>
+
+  <div class="step">
+    <div class="st"><i>3</i><b>구매 방법</b></div>
+    <div class="pill">
+      <label><input type="radio" name="pay" value="현금" checked><span>현금</span></label>
+      <label><input type="radio" name="pay" value="할부"><span>할부</span></label>
+      <label><input type="radio" name="pay" value="리스"><span>리스</span></label>
+    </div>
+
+    <div class="sub hide" id="boxTerm">
+      <div class="t">기간</div>
+      <label class="f" for="term">약정 개월수</label>
+      <select id="term"><option>24개월</option><option selected>36개월</option><option>48개월</option><option>60개월</option></select>
+    </div>
+
+    <div class="sub hide" id="boxInst">
+      <div class="t">할부 조건</div>
+      <label class="f" for="prepayI">선납금</label>
+      <select id="prepayI">
+        <option>0% (선납금 없음)</option><option>10%</option><option>20%</option><option>30%</option>
+        <option>40%</option><option>50%</option><option>상담 시 협의</option>
+      </select>
+    </div>
+
+    <div class="sub hide" id="boxLease">
+      <div class="t">리스 조건</div>
+      <div class="grid2">
+        <div>
+          <label class="f" for="deposit">보증금</label>
+          <select id="deposit">
+            <option>0%</option><option>10%</option><option>20%</option><option>30%</option><option>상담 시 협의</option>
+          </select>
+        </div>
+        <div>
+          <label class="f" for="prepayL">선납금</label>
+          <select id="prepayL">
+            <option>0%</option><option>10%</option><option>20%</option><option>30%</option><option>상담 시 협의</option>
+          </select>
+        </div>
+      </div>
+      <div class="hint">보증금·선납금 비율에 따라 월 납입금이 달라집니다. 정확한 조건은 상담 시 안내드립니다.</div>
+    </div>
+
+    <div class="sub" id="boxRegion">
+      <div class="t">등록 정보</div>
+      <label class="f" for="region">등록 지역 <em>*</em></label>
+      <select id="region">
+        <option value="">— 지역을 선택해 주세요 —</option>
+        <option>서울</option>
+<option>부산</option>
+<option>대구</option>
+<option>인천</option>
+<option>광주</option>
+<option>대전</option>
+<option>울산</option>
+<option>세종</option>
+<option>경기</option>
+<option>강원</option>
+<option>충북</option>
+<option>충남</option>
+<option>전북</option>
+<option>전남</option>
+<option>경북</option>
+<option>경남</option>
+<option>제주</option>
+      </select>
+      <div class="hint">지역별 공채 매입 비율이 달라 등록비용에 차이가 발생합니다. (리스는 리스사 명의 등록으로 별도 확인)</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="st"><i>4</i><b>추가 요청사항</b></div>
+    <textarea id="memo" placeholder="예) 외장 색상 문의, 시승 희망, 기존 차량 매각(Trade-in) 상담, 법인 명의 진행 등"></textarea>
+  </div>
+
+  <div class="step">
+    <div class="agree">
+      <input type="checkbox" id="agree">
+      <p><b>[필수] 개인정보 수집·이용 동의</b><br>
+      성함·연락처·이메일을 <b>견적 상담 및 회신 목적</b>으로만 이용하며, 상담 종료 후 지체 없이 파기합니다.
+      동의를 거부하실 수 있으나 이 경우 상담 회신이 어렵습니다.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="st"><i>5</i><b>신청 내용 확인 · 전송</b></div>
+    <div class="preview" id="pv2">위 항목을 입력하시면 전송할 내용이 여기에 정리됩니다.</div>
+    <div class="err-msg" id="errmsg"></div>
+    <input type="text" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true"
+           style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+    <div class="btns">
+      <button class="b1" id="btnSend">상담 신청하기</button>
+    </div>
+    <div class="done" id="done">
+      <b>상담 신청이 접수되었습니다.</b>
+      <p>담당 컨설턴트가 확인 후 영업시간 내 순차적으로 연락드립니다.<br>
+         급하신 경우 <a href="tel:01085351182">010-8535-1182</a> 로 바로 연락 주십시오.</p>
+    </div>
+    <div class="alt">
+      <div class="alt-t">바로 연락하고 싶으신 경우</div>
+      <div class="btns">
+        <button class="b2" id="btnSms">문자로 보내기</button>
+        <button class="b2" id="btnMail">이메일로 보내기</button>
+        <button class="b2" id="btnCopy">내용 복사 (카카오톡 붙여넣기)</button>
+      </div>
+      <div class="hint">버튼을 누르면 문자·메일 앱이 열리며 내용이 자동으로 채워집니다. 최종 전송 버튼은 직접 눌러주세요.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="ft">Sales Consultant</div>
+  <div class="nm">SC 이상군</div>
+  <div class="rw"><em>Mobile</em><a href="tel:01085351182">010-8535-1182</a></div>
+  <div class="rw"><em>E-mail</em><a href="mailto:sang-kun.lee@hansung.co.kr">sang-kun.lee@hansung.co.kr</a></div>
+  <div class="ad">
+    <div><em>강남전시장</em><span>서울시 강남구 도산대로 239</span></div>
+    <div><em>청담전시장</em><span>서울시 강남구 도산대로 414</span></div>
+  </div>
+  <div class="cp">한성자동차 · Mercedes-Benz 공식 딜러<br>
+  가격 기준 2026.08.13 · 권장 소비자 가격은 사전 예고 없이 변경될 수 있습니다.</div>
+</footer>
+
+</div>
+
+<script>
+/* ============================================================
+   [설정] 아래 RELAY_URL 에 Google Apps Script 웹앱 주소를 넣으면
+   신청 즉시 Notion '가망고객' DB + HITS 업로드용 시트에 자동 등록됩니다.
+   비워두면 문자·이메일 전송 방식으로만 동작합니다.
+   ============================================================ */
+var RELAY_URL = '';           // 예: https://script.google.com/macros/s/AKfy.../exec
+var RELAY_KEY = 'hansung-sc-lee-2026';
+
+var SC_PHONE='01085351182', SC_MAIL='sang-kun.lee@hansung.co.kr';
+
+/* 세부 모델명 → Notion '관심차종' 그룹 */
+function carGroup(n){
+  if(/Maybach/i.test(n)) return 'Maybach';
+  var m=n.replace(/^Mercedes-AMG /,'').replace(/^Mercedes-Benz /,'');
+  if(/^EQA/.test(m)) return 'EQA';
+  if(/^EQB/.test(m)) return 'EQB';
+  if(/^EQE/.test(m)) return 'EQE';
+  if(/^EQS/.test(m)) return 'EQS';
+  if(/^CLA/.test(m)) return 'CLA';
+  if(/^CLE/.test(m)) return 'CLE';
+  if(/^GLA/.test(m)) return 'GLA';
+  if(/^GLB/.test(m)) return 'GLB';
+  if(/^GLC/.test(m)) return 'GLC';
+  if(/^GLE/.test(m)) return 'GLE';
+  if(/^GLS/.test(m)) return 'GLS';
+  if(/^SL /.test(m)) return 'SL';
+  if(/^GT /.test(m)) return 'AMG GT';
+  if(/^G /.test(m)) return 'G-Class';
+  if(/^A /.test(m)) return 'A-Class';
+  if(/^C /.test(m)) return 'C-Class';
+  if(/^E /.test(m)) return 'E-Class';
+  if(/^S /.test(m)) return 'S-Class';
+  return '기타';
+}
+
+function payload(){
+  var p=pay(), o=$('car').options[$('car').selectedIndex];
+  return {
+    key: RELAY_KEY,
+    hp: $('hp').value,
+    name: $('cname').value.trim(),
+    phone: $('cphone').value.trim(),
+    email: $('cmail').value.trim(),
+    model: $('car').value,
+    carGroup: carGroup($('car').value),
+    price: o ? (o.getAttribute('data-price')||'') : '',
+    timing: $('timing').value,
+    payType: p,
+    term: p==='현금' ? '' : $('term').value,
+    prepay: p==='할부' ? $('prepayI').value : (p==='리스' ? $('prepayL').value : ''),
+    deposit: p==='리스' ? $('deposit').value : '',
+    region: p==='리스' ? '' : $('region').value,
+    memo: $('memo').value.trim(),
+    agree: $('agree').checked ? 'Y' : 'N',
+    summary: summary(),
+    ua: navigator.userAgent,
+    at: new Date().toISOString()
+  };
+}
+function $(id){return document.getElementById(id);}
+function pay(){return document.querySelector('input[name=pay]:checked').value;}
+function won(n){return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+
+/* 연락처 자동 하이픈 */
+$('cphone').addEventListener('input',function(){
+  var v=this.value.replace(/[^0-9]/g,'').slice(0,11), o=v;
+  if(v.length>3&&v.length<=7) o=v.slice(0,3)+'-'+v.slice(3);
+  else if(v.length>7) o=v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7);
+  this.value=o; draw();
+});
+
+/* 구매방법에 따른 항목 전환 */
+function toggle(){
+  var p=pay();
+  $('boxTerm').classList.toggle('hide', p==='현금');
+  $('boxInst').classList.toggle('hide', p!=='할부');
+  $('boxLease').classList.toggle('hide', p!=='리스');
+  $('boxRegion').classList.toggle('hide', p==='리스');
+  draw();
+}
+[].forEach.call(document.querySelectorAll('input[name=pay]'),function(r){r.addEventListener('change',toggle);});
+
+/* 차종 선택 시 가격 표시 */
+$('car').addEventListener('change',function(){
+  var o=this.options[this.selectedIndex], p=o.getAttribute('data-price');
+  $('pv').textContent = p ? won(p)+'원' : '—';
+  draw();
+});
+
+function summary(){
+  var p=pay(), L=[];
+  L.push('[메르세데스-벤츠 견적 상담 신청]');
+  L.push('');
+  L.push('■ 고객 정보');
+  L.push('· 성함 : '+$('cname').value.trim());
+  L.push('· 연락처 : '+$('cphone').value.trim());
+  L.push('· 이메일 : '+$('cmail').value.trim());
+  L.push('');
+  L.push('■ 관심 차량');
+  var o=$('car').options[$('car').selectedIndex], pr=o?o.getAttribute('data-price'):null;
+  L.push('· 차종 : '+($('car').value||''));
+  if(pr) L.push('· 권장가 : '+won(pr)+'원');
+  L.push('· 희망 출고 : '+$('timing').value);
+  L.push('');
+  L.push('■ 구매 방법');
+  L.push('· 방식 : '+p);
+  if(p!=='현금') L.push('· 기간 : '+$('term').value);
+  if(p==='할부') L.push('· 선납금 : '+$('prepayI').value);
+  if(p==='리스'){ L.push('· 보증금 : '+$('deposit').value); L.push('· 선납금 : '+$('prepayL').value); }
+  if(p!=='리스') L.push('· 등록지역 : '+($('region').value||''));
+  var m=$('memo').value.trim();
+  if(m){ L.push(''); L.push('■ 요청사항'); L.push(m); }
+  L.push('');
+  L.push('(개인정보 수집·이용 '+($('agree').checked?'동의함':'미동의')+')');
+  return L.join('\n');
+}
+function draw(){ $('pv2').textContent=summary(); }
+['cname','cmail','timing','term','prepayI','deposit','prepayL','region','memo','agree']
+  .forEach(function(id){ $(id).addEventListener('input',draw); $(id).addEventListener('change',draw); });
+
+function check(){
+  var bad=[], p=pay();
+  [['cname','성함'],['cphone','연락처'],['cmail','이메일'],['car','차종']].forEach(function(f){
+    var el=$(f[0]); el.classList.remove('err');
+    if(!el.value.trim()){ el.classList.add('err'); bad.push(f[1]); }
+  });
+  var ph=$('cphone').value.replace(/[^0-9]/g,'');
+  if(ph && ph.length<10){ $('cphone').classList.add('err'); bad.push('연락처 형식'); }
+  var em=$('cmail').value.trim();
+  if(em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ $('cmail').classList.add('err'); bad.push('이메일 형식'); }
+  if(p!=='리스'){
+    var rg=$('region'); rg.classList.remove('err');
+    if(!rg.value){ rg.classList.add('err'); bad.push('등록지역'); }
+  }
+  if(!$('agree').checked) bad.push('개인정보 수집·이용 동의');
+  var box=$('errmsg');
+  if(bad.length){
+    box.textContent='다음 항목을 확인해 주세요 : '+bad.join(', ');
+    box.style.display='block';
+    var f=document.querySelector('.err'); if(f) f.scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  box.style.display='none';
+  return true;
+}
+
+function sendSms(){
+  var body=encodeURIComponent(summary());
+  var ios=/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent);
+  location.href='sms:'+SC_PHONE+(ios?'&':'?')+'body='+body;
+}
+$('btnSms').addEventListener('click',function(){ if(check()) sendSms(); });
+$('btnMail').addEventListener('click',function(){
+  if(!check()) return;
+  var sub=encodeURIComponent('[견적 상담 신청] '+($('cname').value.trim()||'고객')+' · '+$('car').value);
+  location.href='mailto:'+SC_MAIL+'?subject='+sub+'&body='+encodeURIComponent(summary());
+});
+$('btnCopy').addEventListener('click',function(){
+  if(!check()) return;
+  var t=summary(), btn=this;
+  function ok(){ btn.textContent='복사되었습니다 · 카카오톡에 붙여넣어 주세요'; setTimeout(function(){ btn.textContent='내용 복사 (카카오톡 붙여넣기)'; },2200); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(ok).catch(function(){ prompt('아래 내용을 복사해 주세요',t); });
+  } else { prompt('아래 내용을 복사해 주세요',t); }
+});
+
+$('btnSend').addEventListener('click',function(){
+  if(!check()) return;
+  var btn=this;
+  if(!RELAY_URL){ sendSms(); return; }
+  btn.disabled=true; btn.textContent='접수 중입니다…';
+  fetch(RELAY_URL,{
+    method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload())
+  }).then(function(){
+    $('done').style.display='block';
+    btn.textContent='접수 완료';
+    $('done').scrollIntoView({behavior:'smooth',block:'center'});
+  }).catch(function(){
+    btn.disabled=false; btn.textContent='상담 신청하기';
+    $('errmsg').textContent='전송에 실패했습니다. 아래 [문자로 보내기] 버튼을 이용해 주세요.';
+    $('errmsg').style.display='block';
+  });
+});
+
+if(!RELAY_URL){
+  $('btnSend').textContent='문자로 상담 신청하기';
+  $('btnSms').style.display='none';
+}
+toggle();
+</script>
+</body>
+</html>
