@@ -72,6 +72,56 @@
   .se-btns .btn{flex:0 0 auto; padding:0 20px;}
   .se-hint{font-size:11px; color:var(--hint); margin:10px 0 0; line-height:1.7;}
   @media (max-width:620px){ .se-grid{grid-template-columns:1fr;} }
+  .crm-bar{border:1px solid var(--line2); background:#fff; border-radius:10px; padding:12px 12px 10px; margin-bottom:14px;}
+  .crm-title{font-size:12px; font-weight:700; color:var(--accent); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;}
+  .crm-row{display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end;}
+  .crm-row .btn{height:40px; padding:0 14px; white-space:nowrap; flex:0 0 auto;}
+  .crm-memo{margin-top:8px;}
+  .crm-match{font-size:12px; color:var(--muted); margin-top:8px; line-height:1.7;}
+  .crm-match:empty{display:none;}
+  .crm-match .ok{color:var(--success); font-weight:700;}
+  .crm-match .new{color:var(--accent); font-weight:700;}
+  .crm-match .warn{color:#b3261e; font-weight:600;}
+  .crm-match .memo{color:var(--text);}
+  .crm-match .loaded{display:inline-block; margin-top:4px; padding:4px 8px; background:#eef3f7; border-radius:6px; color:var(--text);}
+  .cu-print{font-size:15px; font-weight:700; color:var(--accent); white-space:nowrap;}
+  .cu-print:empty{display:none;}
+  .mini{height:28px; padding:0 10px; font-size:12px; font-family:inherit; border:1px solid var(--line2); border-radius:6px; background:#fff; color:var(--text); cursor:pointer; white-space:nowrap;}
+  .mini:hover{background:#f0f0ec;}
+  .mini.pri{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .modal-box input[type=text]{margin-bottom:8px;}
+  .book{max-width:640px; max-height:88vh; display:flex; flex-direction:column; padding:18px;}
+  .book-h{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
+  .book-h .modal-title{margin:0;}
+  .xbtn{border:none; background:none; font-size:20px; cursor:pointer; color:var(--muted); padding:0 4px;}
+  .book-list{overflow:auto; flex:1; margin:10px 0 8px; -webkit-overflow-scrolling:touch;}
+  .cu-card{border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:8px;}
+  .cu-card.open{border-color:var(--accent);}
+  .cu-head{display:flex; justify-content:space-between; gap:8px; cursor:pointer; font-size:14px;}
+  .cu-head .tel{font-size:13px; color:var(--accent); text-decoration:none; margin-left:4px;}
+  .cu-sub{font-size:12px; color:var(--muted);}
+  .cu-memo{font-size:12px; color:var(--text); background:#f6f6f2; border-radius:6px; padding:3px 8px; margin-top:4px;}
+  .chev{color:var(--hint); font-size:20px; transition:transform .15s; align-self:center;}
+  .cu-card.open .chev{transform:rotate(90deg);}
+  .cu-body{display:none; margin-top:8px;}
+  .cu-card.open .cu-body{display:block;}
+  .cu-acts{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:6px;}
+  .q-row{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px dashed var(--line); font-size:12.5px;}
+  .q-car{font-weight:600;}
+  .q-sub{color:var(--muted); font-size:11.5px;}
+  .q-memo{font-size:12px; margin-top:2px;}
+  .q-r{text-align:right; flex:0 0 auto;}
+  .q-amt{font-weight:700; color:var(--accent);}
+  .q-btns{display:flex; gap:4px; margin-top:4px; justify-content:flex-end;}
+  .empty{font-size:13px; color:var(--muted); text-align:center; padding:24px 8px; line-height:1.8;}
+  .empty.sm{padding:8px; font-size:12px;}
+  .book-foot{display:flex; gap:6px; flex-wrap:wrap;}
+  .book-foot .btn{height:36px; font-size:12.5px; flex:1 1 auto; padding:0 10px;}
+  .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:10px 16px; border-radius:8px; font-size:13px; z-index:1001; opacity:0; transition:opacity .2s; pointer-events:none; max-width:90vw; text-align:center;}
+  @media (max-width:620px){
+    .crm-row{grid-template-columns:1fr 1fr;} .crm-row .crm-act{grid-column:1/-1;} .crm-row .crm-act .btn{width:100%;}
+    .book{max-height:92vh; padding:14px;} .q-row{flex-direction:column; gap:4px;} .q-r{text-align:left;} .q-btns{justify-content:flex-start;}
+  }
   .btns{display:flex; gap:8px; margin-top:16px;}
   .btn{flex:1; height:42px; border:1px solid var(--line2); border-radius:8px; background:#fff;
     font-size:14px; font-family:inherit; cursor:pointer; color:var(--text); transition:background .15s;}
@@ -116,7 +166,8 @@
     .metric{display:block !important;}
     .cols{grid-template-columns:1fr 1fr !important;}
     .g3{grid-template-columns:1fr 1fr 1fr !important;}
-    .btns,.sub,.edit-link,.seller-edit,.no-print,.modal-bg{display:none !important;}
+    .btns,.sub,.edit-link,.seller-edit,.no-print,.modal-bg,.toast{display:none !important;}
+    .cu-print{font-size:17px;}
     select,input{border:none !important; -webkit-appearance:none; appearance:none; box-shadow:none !important; height:auto !important; padding:0 !important; font-size:inherit;}
     .topbar{margin-bottom:7.5px;} .topbar .logo{font-size:24.5px;} .topbar .date{font-size:13px;}
     label.fld{margin-bottom:3.8px; font-size:14.5px;}
@@ -140,9 +191,22 @@
 
   <div class="topbar">
     <span class="logo">현금 견적서</span>
+    <span class="cu-print" id="cuPrint"></span>
     <span class="date" id="today">MY26/27 · 2026.08.13 기준 · 개소세 5%</span>
   </div>
   <p class="sub">차종을 선택하면 가격과 견적이 자동 계산됩니다.</p>
+
+  <div class="crm-bar no-print" id="crmBar" style="display:none;">
+    <div class="crm-title"><span>고객 · 견적 저장 <span style="font-weight:400; color:var(--hint);">(담당자 기기에만 표시)</span></span></div>
+    <div class="crm-row">
+      <div><label class="fld">고객명</label><input type="text" id="cuName" list="cuList" placeholder="이름 입력 · 저장 고객 자동완성" autocomplete="off"></div>
+      <div><label class="fld">연락처</label><input type="text" id="cuPhone" inputmode="tel" placeholder="010-0000-0000" autocomplete="off"></div>
+      <div class="crm-act"><button class="btn" onclick="openBook()">고객 견적함 <span id="bookCnt"></span></button></div>
+    </div>
+    <div class="crm-memo"><input type="text" id="cuMemo" placeholder="이번 견적 메모 (선택) · 예: 배우자와 상의 후 금요일 재연락" autocomplete="off"></div>
+    <div class="crm-match" id="cuMatch"></div>
+    <datalist id="cuList"></datalist>
+  </div>
 
   <div class="grid g2">
     <div>
@@ -287,8 +351,39 @@
 
   <div class="btns">
     <button class="btn" onclick="resetForm()">초기화</button>
+    <button class="btn" id="btnSaveQuote" onclick="saveFromBar()" style="display:none;">견적 저장</button>
     <button class="btn primary" onclick="doPrint()">인쇄 / PDF 저장</button>
   </div>
+
+  <div id="saveModal" class="modal-bg no-print" style="display:none;">
+    <div class="modal-box">
+      <div class="modal-title">이 견적을 고객과 함께 저장할까요?</div>
+      <p class="modal-text">고객명을 입력하면 고객 견적함에 저장되어 나중에 다시 불러올 수 있습니다. 저장된 고객은 자동완성으로 선택하세요.</p>
+      <input type="text" id="smName" list="cuList" placeholder="고객명" autocomplete="off">
+      <input type="text" id="smPhone" inputmode="tel" placeholder="연락처 (선택)" autocomplete="off">
+      <input type="text" id="smMemo" placeholder="견적 메모 (선택)" autocomplete="off">
+      <div class="modal-btns" style="margin-top:6px;">
+        <button class="btn" id="smSkip" onclick="saveModalSkip()">저장 없이 인쇄</button>
+        <button class="btn primary" id="smOk" onclick="saveModalOk()">저장 후 인쇄</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="bookModal" class="modal-bg no-print" style="display:none;" onclick="if(event.target===this)closeBook()">
+    <div class="modal-box book">
+      <div class="book-h"><span class="modal-title">고객 견적함</span><button class="xbtn" onclick="closeBook()" aria-label="닫기">✕</button></div>
+      <input type="text" id="bookQ" placeholder="이름 · 연락처 · 차종 · 메모 검색" autocomplete="off">
+      <div class="book-list" id="bookList"></div>
+      <div class="book-foot">
+        <button class="btn" onclick="exportCsv()">엑셀(CSV) 내보내기</button>
+        <button class="btn" onclick="exportJson()">백업 저장</button>
+        <button class="btn" onclick="document.getElementById('importFile').click()">백업 불러오기</button>
+        <input type="file" id="importFile" accept=".json,application/json" style="display:none;">
+      </div>
+      <p class="se-hint">고객 정보는 이 기기(브라우저)에만 저장되며 서버로 전송되지 않습니다. 기기 변경·브라우저 데이터 삭제 전에 <b>백업 저장</b>을 해 두시고, 다른 기기에서는 <b>백업 불러오기</b>로 옮길 수 있습니다.</p>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
 
   <div id="browserModal" class="modal-bg" style="display:none;">
     <div class="modal-box">
@@ -420,6 +515,7 @@ function calc(){
   const misc=90000;
   const regTotal=acq+bond+misc;
   const grand=buyTotal+regTotal;
+  LAST={price,opt,taxfree,promo,discRate,buyTotal,acq,bond,regTotal,grand};
 
   document.getElementById('m-price').textContent=won(price)+'원';
   document.getElementById('m-buy').textContent=won(buyTotal)+'원';
@@ -472,6 +568,7 @@ function resetForm(){
   document.getElementById('sme').checked=false;
   document.getElementById('extwarranty').checked=false;
   optEl.value='0'; calc();
+  if(typeof crmClear==='function') crmClear();
 }
 const d=new Date();
 document.getElementById('today').textContent='MY26/27 · 개소세5% · 견적일 '+d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
@@ -515,7 +612,7 @@ function isInApp(){
   var ua=(navigator.userAgent||'').toLowerCase();
   return /kakaotalk|naver|line|instagram|fban|fbav|daumapps|whale|everytimeapp|band/.test(ua);
 }
-function doPrint(){
+function doPrintRaw(){
   if(isInApp()){
     var ua=(navigator.userAgent||'').toLowerCase();
     if(/android/.test(ua)){
@@ -552,6 +649,303 @@ function copyUrl(ev){
   }else{ prompt('아래 주소를 복사하세요',url); }
 }
 calc();
+/* ===== 고객 견적함 (CRM) — 담당자 기기 전용, localStorage 저장 ===== */
+var LAST; /* calc()가 채움 */
+const CRM_KEY='benz_crm_v1', CRM_ON_KEY='benz_crm_on';
+let selectedCid=null, pendingAction=null, openCid=null;
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const digitsOf=s=>String(s||'').replace(/[^0-9]/g,'');
+function fmtPhone(s){
+  const d=digitsOf(s);
+  if(d.length===11) return d.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3');
+  if(d.length===10) return d.replace(/^(02)(\d{4})(\d{4})$/,'$1-$2-$3').replace(/^(\d{3})(\d{3})(\d{4})$/,'$1-$2-$3');
+  if(d.length===9) return d.replace(/^(02)(\d{3})(\d{4})$/,'$1-$2-$3');
+  return String(s||'').trim();
+}
+function fmtTs(ts,withTime){
+  const d=new Date(ts), p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'.'+p(d.getMonth()+1)+'.'+p(d.getDate())+(withTime?' '+p(d.getHours())+':'+p(d.getMinutes()):'');
+}
+const sameDay=(a,b)=>fmtTs(a)===fmtTs(b);
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const shortCar=n=>String(n||'').replace(' [MY27·개소세5%]',' (MY27)');
+
+function crmLoad(){
+  try{ const d=JSON.parse(localStorage.getItem(CRM_KEY)); if(d&&Array.isArray(d.customers)&&Array.isArray(d.quotes)) return d; }catch(e){}
+  return {customers:[],quotes:[]};
+}
+function crmStore(db){
+  try{ localStorage.setItem(CRM_KEY,JSON.stringify(db)); return true; }
+  catch(e){ alert('이 기기에 저장하지 못했습니다. (저장 공간 부족 또는 개인정보 보호 모드)\n고객 견적함 → 백업 저장 후 오래된 견적을 정리해 주세요.'); return false; }
+}
+function hasSeller(){
+  try{ const s=JSON.parse(localStorage.getItem(SELLER_KEY)); return !!(s&&(s.name||s.phone)); }catch(e){ return false; }
+}
+function crmEnabled(){
+  try{ if(/[?&#]crm\b/.test(location.href)) localStorage.setItem(CRM_ON_KEY,'1'); }catch(e){}
+  let flag=false; try{ flag=localStorage.getItem(CRM_ON_KEY)==='1'; }catch(e){}
+  return flag||hasSeller();
+}
+function crmVisibility(){
+  const on=crmEnabled();
+  $('crmBar').style.display=on?'block':'none';
+  $('btnSaveQuote').style.display=on?'':'none';
+  if(on) crmRefresh();
+}
+
+function getInputs(){
+  return {
+    car:DATA[+carSel.value].name, region:REGIONS[+regSel.value][0], year:(/개소세5%|MY27/.test(DATA[+carSel.value].name)?'MY 2027':ySel.value), color:cSel.value, interior:iSel.value,
+    promo:+$('promo').value||0, fleet:+$('fleet').value||0, bonddc:+$('bonddc').value||0, opt:optVal(),
+    taxfree:$('taxfreeChk').checked, retTev:$('retTev').checked, retNon:$('retNon').checked, tradein:$('tradein').checked,
+    conquest:$('conquest').checked, repairhist:$('repairhist').checked, highmile:$('highmile').checked, sme:$('sme').checked,
+    extwarranty:$('extwarranty').checked
+  };
+}
+function applyInputs(i){
+  const idx=DATA.findIndex(d=>d.name===i.car);
+  if(idx<0){ alert('저장 당시 차종 「'+shortCar(i.car)+'」이(가) 현재 가격표에 없습니다.\n저장된 금액은 견적함에서 확인해 주세요.'); return false; }
+  carSel.value=idx;
+  const r=REGIONS.findIndex(x=>x[0]===i.region); if(r>=0) regSel.value=r;
+  if(YEARS.includes(i.year)) ySel.value=i.year;
+  if(COLORS.includes(i.color)) cSel.value=i.color;
+  if(INTERIORS.includes(i.interior)) iSel.value=i.interior;
+  $('promo').value=i.promo; $('fleet').value=i.fleet; $('bonddc').value=i.bonddc;
+  ['taxfree','retTev','retNon','tradein','conquest','repairhist','highmile','sme','extwarranty'].forEach(k=>{
+    $(k==='taxfree'?'taxfreeChk':k).checked=!!i[k];
+  });
+  optEl.value=(+i.opt||0).toLocaleString('ko-KR');
+  calc(); return true;
+}
+
+/* 고객 매칭: 선택한 고객 → 연락처 일치 → 동명 1명 */
+function crmMatch(db,name,phone){
+  name=String(name||'').trim(); const p=digitsOf(phone);
+  if(selectedCid){ const c=db.customers.find(x=>x.id===selectedCid); if(c&&c.name===name) return {c}; }
+  if(p){ const c=db.customers.find(x=>digitsOf(x.phone)===p); if(c) return {c}; }
+  if(!name) return {};
+  const same=db.customers.filter(x=>x.name===name);
+  if(!p){
+    if(same.length===1) return {c:same[0]};
+    if(same.length>1) return {ambiguous:same.length};
+  } else {
+    const noPhone=same.filter(x=>!digitsOf(x.phone));
+    if(noPhone.length===1) return {c:noPhone[0], fillPhone:true};
+  }
+  return {};
+}
+function quotesOf(db,cid){ return db.quotes.filter(q=>q.cid===cid).sort((a,b)=>b.ts-a.ts); }
+
+function saveQuote(name,phone,memo){
+  name=String(name||'').trim();
+  if(!name){ alert('고객명을 입력해 주세요.'); return null; }
+  const db=crmLoad(); const m=crmMatch(db,name,phone); const now=Date.now();
+  if(m.ambiguous){ alert('같은 이름의 고객이 '+m.ambiguous+'명 있습니다.\n연락처를 입력하거나 자동완성 목록에서 고객을 선택해 주세요.'); return null; }
+  let c=m.c, isNew=false;
+  if(!c){ c={id:uid(),name,phone:fmtPhone(phone),memo:'',created:now,updated:now}; db.customers.push(c); isNew=true; }
+  else{ if(digitsOf(phone)&&!digitsOf(c.phone)) c.phone=fmtPhone(phone); c.updated=now; }
+  const inputs=getInputs(), sig=JSON.stringify(inputs);
+  const last=quotesOf(db,c.id)[0];
+  let updated=false;
+  if(last&&last.sig===sig&&sameDay(last.ts,now)){ last.ts=now; last.result=Object.assign({},LAST); if(memo) last.memo=memo; updated=true; }
+  else db.quotes.push({id:uid(),cid:c.id,ts:now,inputs,sig,result:Object.assign({},LAST),memo:memo||''});
+  if(!crmStore(db)) return null;
+  selectedCid=c.id;
+  $('cuName').value=c.name; $('cuPhone').value=c.phone||'';
+  toast((isNew?'신규 고객 ':'')+c.name+' 고객님 견적 '+(updated?'갱신':'저장')+' · 총 '+quotesOf(db,c.id).length+'건');
+  crmRefresh(); return c;
+}
+
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.style.opacity='1';
+  clearTimeout(toast._t); toast._t=setTimeout(()=>{ t.style.opacity='0'; },2200);
+}
+
+/* 상단 고객 입력줄 */
+function crmRefresh(){
+  const db=crmLoad();
+  const dl=$('cuList'); dl.innerHTML='';
+  db.customers.slice().sort((a,b)=>b.updated-a.updated).forEach(c=>{
+    const o=document.createElement('option'); o.value=c.name+' · '+(c.phone||'번호 없음'); dl.appendChild(o);
+  });
+  $('bookCnt').textContent=db.customers.length?'('+db.customers.length+')':'';
+  const name=$('cuName').value.trim(), phone=$('cuPhone').value;
+  $('cuPrint').textContent=name?name+' 고객님':'';
+  const box=$('cuMatch');
+  if(!name&&!digitsOf(phone)){ box.innerHTML=''; return; }
+  const m=crmMatch(db,name,phone);
+  if(m.ambiguous){ box.innerHTML='<span class="warn">같은 이름의 고객이 '+m.ambiguous+'명입니다 — 연락처를 입력하거나 목록에서 선택하세요.</span>'; return; }
+  if(m.c){
+    const qs=quotesOf(db,m.c.id), lq=qs[0];
+    box.innerHTML='<span class="ok">✓ 저장 고객</span> · 견적 '+qs.length+'건'
+      +(lq?' · 최근 '+fmtTs(lq.ts)+' '+esc(shortCar(lq.inputs.car))+' / '+won(lq.result.grand||0)+'원':'')
+      +(m.c.memo?'<br><span class="memo">메모: '+esc(m.c.memo)+'</span>':'')
+      +' <button class="mini" onclick="openBook(\''+m.c.id+'\')">이력 보기</button>';
+  } else if(name){
+    box.innerHTML='<span class="new">신규 고객</span> · 견적을 저장하면 고객 견적함에 등록됩니다.';
+  } else box.innerHTML='';
+}
+function onCuInput(e){
+  const v=$('cuName').value; const db=crmLoad();
+  const hit=db.customers.find(c=>(c.name+' · '+(c.phone||'번호 없음'))===v);
+  if(hit){ selectedCid=hit.id; $('cuName').value=hit.name; $('cuPhone').value=hit.phone||''; }
+  else if(e) selectedCid=null;
+  crmRefresh();
+}
+function crmClear(){ selectedCid=null; ['cuName','cuPhone','cuMemo'].forEach(id=>{ $(id).value=''; }); crmRefresh(); }
+
+/* 저장 / 인쇄 흐름 */
+function saveFromBar(){
+  const name=$('cuName').value.trim();
+  if(!name){ openSaveModal('save'); return; }
+  saveQuote(name,$('cuPhone').value,$('cuMemo').value.trim());
+}
+function doPrint(){
+  if(crmEnabled()){
+    const name=$('cuName').value.trim();
+    if(!name){ openSaveModal('print'); return; }
+    if(!saveQuote(name,$('cuPhone').value,$('cuMemo').value.trim())) return;
+  }
+  doPrintRaw();
+}
+function openSaveModal(action){
+  pendingAction=action;
+  $('smName').value=$('cuName').value; $('smPhone').value=$('cuPhone').value; $('smMemo').value=$('cuMemo').value;
+  $('smSkip').textContent=action==='print'?'저장 없이 인쇄':'취소';
+  $('smOk').textContent=action==='print'?'저장 후 인쇄':'저장';
+  $('saveModal').style.display='flex'; setTimeout(()=>$('smName').focus(),50);
+}
+function closeSaveModal(){ $('saveModal').style.display='none'; }
+function saveModalSkip(){ closeSaveModal(); if(pendingAction==='print') doPrintRaw(); pendingAction=null; }
+function saveModalOk(){
+  const v=$('smName').value; const db=crmLoad();
+  const hit=db.customers.find(c=>(c.name+' · '+(c.phone||'번호 없음'))===v);
+  if(hit){ selectedCid=hit.id; $('smName').value=hit.name; if(!$('smPhone').value) $('smPhone').value=hit.phone||''; }
+  $('cuName').value=$('smName').value; $('cuPhone').value=$('smPhone').value; $('cuMemo').value=$('smMemo').value;
+  if(!saveQuote($('smName').value,$('smPhone').value,$('smMemo').value.trim())) return;
+  closeSaveModal(); if(pendingAction==='print') doPrintRaw(); pendingAction=null;
+}
+
+/* 고객 견적함 */
+function openBook(cid){ openCid=cid||null; $('bookQ').value=''; renderBook(); $('bookModal').style.display='flex'; }
+function closeBook(){ $('bookModal').style.display='none'; }
+function renderBook(){
+  const db=crmLoad(), q=$('bookQ').value.trim().toLowerCase(), qd=digitsOf(q);
+  let list=db.customers.map(c=>({c,qs:quotesOf(db,c.id)}));
+  if(q) list=list.filter(({c,qs})=>c.name.toLowerCase().includes(q)||(qd&&digitsOf(c.phone).includes(qd))
+    ||(c.memo||'').toLowerCase().includes(q)||qs.some(x=>x.inputs.car.toLowerCase().includes(q)||(x.memo||'').toLowerCase().includes(q)));
+  list.sort((a,b)=>((b.qs[0]||{}).ts||b.c.updated)-((a.qs[0]||{}).ts||a.c.updated));
+  const el=$('bookList');
+  if(!list.length){ el.innerHTML='<p class="empty">'+(db.customers.length?'검색 결과가 없습니다.':'저장된 고객이 없습니다.<br>견적 화면에서 고객명을 입력하고 <b>견적 저장</b> 또는 <b>인쇄</b>를 누르면 여기에 쌓입니다.')+'</p>'; return; }
+  el.innerHTML=list.map(({c,qs})=>{
+    const open=openCid===c.id||(!!q&&list.length<=3);
+    const lq=qs[0];
+    const rows=qs.map(x=>{
+      const r=x.result||{}, i=x.inputs, opts=[i.year,i.color.replace(/^\d+ - /,''),i.interior].join(' · ');
+      return '<div class="q-row"><div class="q-l"><div class="q-car">'+esc(shortCar(i.car))+'</div>'
+        +'<div class="q-sub">'+fmtTs(x.ts,true)+' · '+esc(opts)+' · 할인 '+((r.discRate||0)*100).toFixed(1)+'%'
+        +(i.opt?' · 옵션 '+won(i.opt):'')+' · '+esc(i.region.split(' · ')[0])+'</div>'
+        +(x.memo?'<div class="q-memo">'+esc(x.memo)+'</div>':'')+'</div>'
+        +'<div class="q-r"><div class="q-amt">'+won(r.grand||0)+'원</div>'
+        +'<div class="q-btns"><button class="mini pri" onclick="loadQuote(\''+x.id+'\')">불러오기</button>'
+        +'<button class="mini" onclick="delQuote(\''+x.id+'\')">삭제</button></div></div></div>';
+    }).join('');
+    return '<div class="cu-card'+(open?' open':'')+'" id="cc-'+c.id+'">'
+      +'<div class="cu-head" onclick="toggleCu(\''+c.id+'\')"><div><b>'+esc(c.name)+'</b>'
+      +(c.phone?' <a class="tel" href="tel:'+digitsOf(c.phone)+'" onclick="event.stopPropagation()">'+esc(c.phone)+'</a>':'')
+      +'<div class="cu-sub">견적 '+qs.length+'건'+(lq?' · 최근 '+fmtTs(lq.ts)+' '+esc(shortCar(lq.inputs.car)):'')+'</div>'
+      +(c.memo?'<div class="cu-memo">'+esc(c.memo)+'</div>':'')+'</div><span class="chev">›</span></div>'
+      +'<div class="cu-body"><div class="cu-acts"><button class="mini pri" onclick="pickCu(\''+c.id+'\')">이 고객으로 견적</button>'
+      +'<button class="mini" onclick="editCu(\''+c.id+'\')">정보·메모 수정</button>'
+      +'<button class="mini" onclick="delCu(\''+c.id+'\')">고객 삭제</button></div>'
+      +(rows||'<p class="empty sm">저장된 견적이 없습니다.</p>')+'</div></div>';
+  }).join('');
+}
+function toggleCu(id){ openCid=openCid===id?null:id; document.querySelectorAll('.cu-card').forEach(e=>e.classList.toggle('open',e.id==='cc-'+openCid)); }
+function pickCu(id){
+  const c=crmLoad().customers.find(x=>x.id===id); if(!c) return;
+  selectedCid=c.id; $('cuName').value=c.name; $('cuPhone').value=c.phone||''; $('cuMemo').value='';
+  closeBook(); crmRefresh(); toast(c.name+' 고객님 선택됨');
+}
+function loadQuote(qid){
+  const db=crmLoad(), x=db.quotes.find(q=>q.id===qid); if(!x) return;
+  const c=db.customers.find(k=>k.id===x.cid);
+  if(!applyInputs(x.inputs)) return;
+  if(c){ selectedCid=c.id; $('cuName').value=c.name; $('cuPhone').value=c.phone||''; }
+  $('cuMemo').value=x.memo||'';
+  closeBook(); crmRefresh();
+  const was=(x.result||{}).grand||0, now=LAST.grand||0;
+  $('cuMatch').innerHTML+='<br><span class="loaded">불러온 견적: '+fmtTs(x.ts,true)+' 저장분 · 당시 총계 '+won(was)+'원'
+    +(was!==now?' → <b>현재 가격 기준 '+won(now)+'원</b> ('+(now>was?'+':'')+won(now-was)+'원)':' (현재와 동일)')+'</span>';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function delQuote(qid){
+  if(!confirm('이 견적을 삭제할까요?')) return;
+  const db=crmLoad(); db.quotes=db.quotes.filter(q=>q.id!==qid); crmStore(db); renderBook(); crmRefresh();
+}
+function editCu(id){
+  const db=crmLoad(), c=db.customers.find(x=>x.id===id); if(!c) return;
+  const n=prompt('고객명',c.name); if(n===null) return;
+  const p=prompt('연락처',c.phone||''); if(p===null) return;
+  const m=prompt('고객 메모 (관심 차종, 상담 상황, 다음 연락일 등)',c.memo||''); if(m===null) return;
+  if(n.trim()) c.name=n.trim(); c.phone=fmtPhone(p); c.memo=m.trim(); c.updated=Date.now();
+  crmStore(db); openCid=id; renderBook(); crmRefresh();
+}
+function delCu(id){
+  const db=crmLoad(), c=db.customers.find(x=>x.id===id); if(!c) return;
+  const n=quotesOf(db,id).length;
+  if(!confirm(c.name+' 고객과 견적 '+n+'건을 모두 삭제할까요?\n삭제 후에는 되돌릴 수 없습니다.')) return;
+  db.customers=db.customers.filter(x=>x.id!==id); db.quotes=db.quotes.filter(q=>q.cid!==id);
+  crmStore(db); if(selectedCid===id) crmClear(); renderBook(); crmRefresh();
+}
+
+/* 백업 · 내보내기 */
+function download(name,text,type){
+  const b=new Blob([text],{type}); const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
+}
+function stamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate()); }
+function exportJson(){
+  const db=crmLoad();
+  download('고객견적함_백업_'+stamp()+'.json',JSON.stringify({app:'benz-crm',v:1,exported:Date.now(),...db}),'application/json');
+}
+function exportCsv(){
+  const db=crmLoad(), cq=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+  const head=['저장일시','고객명','연락처','고객메모','차종','연식','외장','내장','등록지역','할인율(%)','옵션가','차량가격','구입비용','등록비용','총계','견적메모'];
+  const rows=db.quotes.slice().sort((a,b)=>b.ts-a.ts).map(x=>{
+    const c=db.customers.find(k=>k.id===x.cid)||{}, i=x.inputs, r=x.result||{};
+    return [fmtTs(x.ts,true),c.name,c.phone,c.memo,shortCar(i.car),i.year,i.color,i.interior,i.region,((r.discRate||0)*100).toFixed(1),i.opt,r.price,r.buyTotal,r.regTotal,r.grand,x.memo].map(cq).join(',');
+  });
+  db.customers.filter(c=>!db.quotes.some(q=>q.cid===c.id)).forEach(c=>rows.push(['',c.name,c.phone,c.memo].map(cq).join(',')));
+  download('고객견적함_'+stamp()+'.csv','﻿'+[head.map(cq).join(',')].concat(rows).join('\r\n'),'text/csv;charset=utf-8');
+}
+function importJson(file){
+  if(!file) return;
+  const fr=new FileReader();
+  fr.onload=()=>{
+    let inc; try{ inc=JSON.parse(fr.result); }catch(e){ alert('백업 파일을 읽을 수 없습니다.'); return; }
+    if(!inc||!Array.isArray(inc.customers)||!Array.isArray(inc.quotes)){ alert('고객 견적함 백업 파일이 아닙니다.'); return; }
+    const db=crmLoad(); let nc=0,nq=0;
+    inc.customers.forEach(c=>{ if(!db.customers.some(x=>x.id===c.id)){ db.customers.push(c); nc++; } });
+    inc.quotes.forEach(q=>{ if(!db.quotes.some(x=>x.id===q.id)){ db.quotes.push(q); nq++; } });
+    if(crmStore(db)){ alert('불러오기 완료: 고객 '+nc+'명 · 견적 '+nq+'건 추가'); renderBook(); crmRefresh(); }
+  };
+  fr.readAsText(file);
+  $('importFile').value='';
+}
+
+['cuName'].forEach(id=>$(id).addEventListener('input',onCuInput));
+$('cuPhone').addEventListener('input',()=>{ selectedCid=null; crmRefresh(); });
+$('cuPhone').addEventListener('blur',function(){ if(this.value) this.value=fmtPhone(this.value); crmRefresh(); });
+$('smPhone').addEventListener('blur',function(){ if(this.value) this.value=fmtPhone(this.value); });
+$('smName').addEventListener('keydown',e=>{ if(e.key==='Enter') saveModalOk(); });
+$('bookQ').addEventListener('input',renderBook);
+$('importFile').addEventListener('change',function(){ importJson(this.files[0]); });
+const _saveSellerOrig=saveSeller;
+saveSeller=function(){ _saveSellerOrig(); crmVisibility(); };
+crmVisibility();
 </script>
 </body>
 </html>
