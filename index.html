@@ -117,6 +117,14 @@
   .empty.sm{padding:8px; font-size:12px;}
   .book-foot{display:flex; gap:6px; flex-wrap:wrap;}
   .book-foot .btn{height:36px; font-size:12.5px; flex:1 1 auto; padding:0 10px;}
+  .sync-box{font-weight:400; font-size:11.5px; color:var(--muted); display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end;}
+  .sync-box .mini{height:26px; font-size:11.5px;}
+  .sy-ok{color:var(--success); font-weight:600;} .sy-busy{color:var(--accent);} .sy-off{color:var(--hint);}
+  .sy-who{color:var(--hint); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .mini.g{border-color:#c9cdd2; font-weight:600;}
+  .mini.warn{border-color:#e7b3ae; color:#b3261e;}
+  .book-acct{font-size:12px; color:var(--muted); margin-left:auto; margin-right:8px; display:inline-flex; align-items:center; gap:6px;}
+  .crm-title{flex-wrap:wrap; gap:6px;}
   .toast{position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:10px 16px; border-radius:8px; font-size:13px; z-index:1001; opacity:0; transition:opacity .2s; pointer-events:none; max-width:90vw; text-align:center;}
   @media (max-width:620px){
     .crm-row{grid-template-columns:1fr 1fr;} .crm-row .crm-act{grid-column:1/-1;} .crm-row .crm-act .btn{width:100%;}
@@ -197,7 +205,7 @@
   <p class="sub">차종을 선택하면 가격과 견적이 자동 계산됩니다.</p>
 
   <div class="crm-bar no-print" id="crmBar" style="display:none;">
-    <div class="crm-title"><span>고객 · 견적 저장 <span style="font-weight:400; color:var(--hint);">(담당자 기기에만 표시)</span></span></div>
+    <div class="crm-title"><span>고객 · 견적 저장 <span style="font-weight:400; color:var(--hint);">(담당자 전용)</span></span><span class="sync-box" id="syncBox"></span></div>
     <div class="crm-row">
       <div><label class="fld">고객명</label><input type="text" id="cuName" list="cuList" placeholder="이름 입력 · 저장 고객 자동완성" autocomplete="off"></div>
       <div><label class="fld">연락처</label><input type="text" id="cuPhone" inputmode="tel" placeholder="010-0000-0000" autocomplete="off"></div>
@@ -359,6 +367,7 @@
     <div class="modal-box">
       <div class="modal-title">이 견적을 고객과 함께 저장할까요?</div>
       <p class="modal-text">고객명을 입력하면 고객 견적함에 저장되어 나중에 다시 불러올 수 있습니다. 저장된 고객은 자동완성으로 선택하세요.</p>
+      <p class="modal-text" id="smLogin" style="display:none; color:var(--accent);">저장을 누르면 구글 로그인 창이 열립니다. 견적은 본인 구글 드라이브에 저장되어 본인 폰·PC에서만 보입니다.</p>
       <input type="text" id="smName" list="cuList" placeholder="고객명" autocomplete="off">
       <input type="text" id="smPhone" inputmode="tel" placeholder="연락처 (선택)" autocomplete="off">
       <input type="text" id="smMemo" placeholder="견적 메모 (선택)" autocomplete="off">
@@ -371,7 +380,7 @@
 
   <div id="bookModal" class="modal-bg no-print" style="display:none;" onclick="if(event.target===this)closeBook()">
     <div class="modal-box book">
-      <div class="book-h"><span class="modal-title">고객 견적함</span><button class="xbtn" onclick="closeBook()" aria-label="닫기">✕</button></div>
+      <div class="book-h"><span class="modal-title">고객 견적함</span><span class="book-acct" id="bookAcct"></span><button class="xbtn" onclick="closeBook()" aria-label="닫기">✕</button></div>
       <input type="text" id="bookQ" placeholder="이름 · 연락처 · 차종 · 메모 검색" autocomplete="off">
       <div class="book-list" id="bookList"></div>
       <div class="book-foot">
@@ -380,7 +389,7 @@
         <button class="btn" onclick="document.getElementById('importFile').click()">백업 불러오기</button>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none;">
       </div>
-      <p class="se-hint">고객 정보는 이 기기(브라우저)에만 저장되며 서버로 전송되지 않습니다. 기기 변경·브라우저 데이터 삭제 전에 <b>백업 저장</b>을 해 두시고, 다른 기기에서는 <b>백업 불러오기</b>로 옮길 수 있습니다.</p>
+      <p class="se-hint">고객 정보는 로그인한 담당자 <b>본인 구글 드라이브의 앱 전용 숨김 공간</b>에 저장되어, 같은 구글 계정으로 로그인한 본인 폰·PC끼리만 동기화됩니다. 다른 담당자·고객·사이트 운영자는 볼 수 없습니다. 공용 PC에서는 사용 후 <b>로그아웃</b>하세요.</p>
     </div>
   </div>
   <div class="toast" id="toast"></div>
@@ -649,10 +658,19 @@ function copyUrl(ev){
   }else{ prompt('아래 주소를 복사하세요',url); }
 }
 calc();
-/* ===== 고객 견적함 (CRM) — 담당자 기기 전용, localStorage 저장 ===== */
+/* ===== 고객 견적함 (CRM) v2 — 담당자 본인 구글 드라이브(앱 전용 숨김 폴더)에 저장·동기화 =====
+   · 담당자마다 자기 구글 계정으로 로그인 → 자기 드라이브 appDataFolder에만 저장 → 본인 폰·PC끼리만 동기화
+   · 다른 담당자·고객·사이트 운영자 누구도 남의 데이터에 접근 불가 (서버 없음)
+   · GOOGLE_CLIENT_ID가 비어 있으면 v1처럼 이 기기에만 저장 */
+const GOOGLE_CLIENT_ID='__GOOGLE_CLIENT_ID__';
+const CLOUD=/\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID);
+const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.appdata';
+const DRIVE_FILE='benz_crm.json';
 var LAST; /* calc()가 채움 */
-const CRM_KEY='benz_crm_v1', CRM_ON_KEY='benz_crm_on';
+const CRM_V1_KEY='benz_crm_v1', CRM_ON_KEY='benz_crm_on', ACCT_KEY='benz_crm_acct', CACHE_PREFIX='benz_crm_v2:';
 let selectedCid=null, pendingAction=null, openCid=null;
+let acct=null, tokenClient=null, accessToken=null, tokenExp=0, tokenQueue=null;
+let syncing=false, syncAgain=false, syncTimer=null, syncState='', syncMsg='';
 const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const digitsOf=s=>String(s||'').replace(/[^0-9]/g,'');
@@ -667,33 +685,237 @@ function fmtTs(ts,withTime){
   const d=new Date(ts), p=n=>String(n).padStart(2,'0');
   return d.getFullYear()+'.'+p(d.getMonth()+1)+'.'+p(d.getDate())+(withTime?' '+p(d.getHours())+':'+p(d.getMinutes()):'');
 }
+const hhmm=ts=>{ const d=new Date(ts); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); };
 const sameDay=(a,b)=>fmtTs(a)===fmtTs(b);
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 const shortCar=n=>String(n||'').replace(' [MY27·개소세5%]',' (MY27)');
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
 
+/* ---------- 로컬 저장 (계정별 분리 캐시) ---------- */
+const emptyDb=()=>({v:2,customers:[],quotes:[],deleted:{}});
+function cacheKey(){ return CLOUD?(acct?CACHE_PREFIX+acct.pid:null):CRM_V1_KEY; }
+function normDb(d){
+  if(!d||!Array.isArray(d.customers)||!Array.isArray(d.quotes)) return emptyDb();
+  d.customers.forEach(c=>{ if(!c.updated) c.updated=c.created||Date.now(); });
+  d.quotes.forEach(q=>{ if(!q.updated) q.updated=q.ts||Date.now(); });
+  if(!d.deleted||typeof d.deleted!=='object') d.deleted={};
+  d.v=2; return d;
+}
 function crmLoad(){
-  try{ const d=JSON.parse(localStorage.getItem(CRM_KEY)); if(d&&Array.isArray(d.customers)&&Array.isArray(d.quotes)) return d; }catch(e){}
-  return {customers:[],quotes:[]};
+  const k=cacheKey(); if(!k) return emptyDb();
+  try{ return normDb(JSON.parse(lsGet(k))); }catch(e){ return emptyDb(); }
+}
+function localSave(db){
+  const k=cacheKey(); if(!k) return false;
+  if(!lsSet(k,JSON.stringify(db))){ alert('이 기기에 저장하지 못했습니다. (저장 공간 부족 또는 개인정보 보호 모드)'); return false; }
+  return true;
 }
 function crmStore(db){
-  try{ localStorage.setItem(CRM_KEY,JSON.stringify(db)); return true; }
-  catch(e){ alert('이 기기에 저장하지 못했습니다. (저장 공간 부족 또는 개인정보 보호 모드)\n고객 견적함 → 백업 저장 후 오래된 견적을 정리해 주세요.'); return false; }
+  if(!localSave(db)) return false;
+  if(CLOUD&&acct){ acct.dirty=true; saveAcct(); scheduleSync(); }
+  return true;
 }
-function hasSeller(){
-  try{ const s=JSON.parse(localStorage.getItem(SELLER_KEY)); return !!(s&&(s.name||s.phone)); }catch(e){ return false; }
+function saveAcct(){ if(acct) lsSet(ACCT_KEY,JSON.stringify(acct)); else lsDel(ACCT_KEY); }
+function loadAcct(){ try{ const a=JSON.parse(lsGet(ACCT_KEY)); if(a&&a.pid) return a; }catch(e){} return null; }
+
+/* 두 DB 병합: id 기준, 최신 updated 우선, 삭제 기록(tombstone) 반영 */
+function mergeDb(a,b){
+  a=normDb(a); b=normDb(b);
+  const del=Object.assign({},a.deleted);
+  Object.keys(b.deleted).forEach(k=>{ del[k]=Math.max(del[k]||0,b.deleted[k]); });
+  const mergeArr=(x,y)=>{
+    const m=new Map();
+    x.concat(y).forEach(r=>{ const p=m.get(r.id); if(!p||p.updated<r.updated) m.set(r.id,r); });
+    return [...m.values()].filter(r=>!(del[r.id]>=r.updated));
+  };
+  const out={v:2,customers:mergeArr(a.customers,b.customers),quotes:mergeArr(a.quotes,b.quotes),deleted:del};
+  const sa=a.seller, sb=b.seller;
+  if(sa||sb) out.seller=(!sa?sb:!sb?sa:(sa.updated>=sb.updated?sa:sb));
+  const cut=Date.now()-400*864e5; Object.keys(out.deleted).forEach(k=>{ if(out.deleted[k]<cut) delete out.deleted[k]; });
+  return out;
 }
+const dbSig=d=>JSON.stringify([d.customers.map(c=>c.id+c.updated).sort(),d.quotes.map(q=>q.id+q.updated).sort(),Object.keys(d.deleted).sort(),d.seller?d.seller.updated:0]);
+
+/* ---------- 구글 로그인 (Google Identity Services, 토큰 방식) ---------- */
+function loadGis(){
+  if(!CLOUD||tokenClient) return;
+  const init=()=>{
+    try{
+      tokenClient=google.accounts.oauth2.initTokenClient({
+        client_id:GOOGLE_CLIENT_ID, scope:DRIVE_SCOPE, callback:onToken,
+        error_callback:e=>{ runTokenFallback(e&&e.type==='popup_closed'?'로그인 창이 닫혔습니다.':'구글 로그인에 실패했습니다.'); }
+      });
+    }catch(e){ setSync('err','구글 로그인 준비 실패'); }
+    renderSync();
+  };
+  if(window.google&&google.accounts&&google.accounts.oauth2) return init();
+  if(document.getElementById('gisScript')) return;
+  const s=document.createElement('script'); s.id='gisScript'; s.src='https://accounts.google.com/gsi/client'; s.async=true;
+  s.onload=init; s.onerror=()=>{ setSync('err','구글 로그인 모듈을 불러오지 못했습니다 (네트워크 확인)'); };
+  document.head.appendChild(s);
+}
+const tokenValid=()=>!!accessToken&&Date.now()<tokenExp-60000;
+/* next: 토큰 확보 후 실행, fallback: 로그인 실패·취소 시 실행. 반드시 클릭 이벤트 안에서 호출(팝업 차단 방지) */
+function ensureToken(next,fallback){
+  if(!CLOUD){ next&&next(); return; }
+  if(tokenValid()){ next&&next(); return; }
+  if(isInApp()){ alert('카카오톡 등 앱 안의 브라우저에서는 구글 로그인이 되지 않습니다.\nSafari·Chrome에서 열어주세요.'); openBrowserModal(); fallback&&fallback(); return; }
+  if(!tokenClient){ loadGis(); toast('구글 로그인을 준비 중입니다. 잠시 후 다시 눌러주세요.'); fallback&&fallback(); return; }
+  tokenQueue={next,fallback};
+  const opt={prompt:acct?'':'select_account'}; if(acct&&acct.email) opt.login_hint=acct.email;
+  try{ tokenClient.requestAccessToken(opt); }catch(e){ runTokenFallback('구글 로그인 창을 열지 못했습니다.'); }
+}
+function runTokenFallback(msg){
+  const q=tokenQueue; tokenQueue=null;
+  if(msg) toast(msg);
+  renderSync();
+  if(q&&q.fallback) q.fallback();
+}
+async function onToken(resp){
+  if(!resp||resp.error||!resp.access_token){ runTokenFallback('구글 로그인이 완료되지 않았습니다.'); return; }
+  if(window.google&&google.accounts.oauth2.hasGrantedAllScopes&&!google.accounts.oauth2.hasGrantedAllScopes(resp,DRIVE_SCOPE)){
+    accessToken=null; runTokenFallback('드라이브 저장 권한에 동의해야 동기화할 수 있습니다.'); return;
+  }
+  accessToken=resp.access_token; tokenExp=Date.now()+(+resp.expires_in||3600)*1000;
+  try{
+    const r=await driveFetch('https://www.googleapis.com/drive/v3/about?fields=user(displayName,emailAddress,permissionId)');
+    const u=(await r.json()).user||{};
+    const pid=u.permissionId||u.emailAddress;
+    if(!acct||acct.pid!==pid){ switchAccount({pid,email:u.emailAddress||'',name:u.displayName||'',fileId:null,dirty:false}); }
+    else { acct.email=u.emailAddress||acct.email; acct.name=u.displayName||acct.name; saveAcct(); }
+  }catch(e){ accessToken=null; runTokenFallback('구글 계정 확인에 실패했습니다.'); return; }
+  const q=tokenQueue; tokenQueue=null;
+  if(q&&q.next) q.next();
+  syncNow();
+}
+function switchAccount(a){
+  acct=a; saveAcct(); selectedCid=null;
+  /* v1(이 기기 전용)로 저장했던 고객이 있으면 내 계정으로 옮길지 확인 */
+  let v1=null; try{ v1=normDb(JSON.parse(lsGet(CRM_V1_KEY))); }catch(e){}
+  if(v1&&(v1.customers.length||v1.quotes.length)){
+    if(confirm('이 기기에만 저장돼 있던 고객 '+v1.customers.length+'명 · 견적 '+v1.quotes.length+'건을\n'+(a.email||'내 구글 계정')+' 으로 옮길까요?\n\n(공용 PC라면 본인이 저장한 고객이 맞는지 확인하세요)')){
+      localSave(mergeDb(crmLoad(),v1)); acct.dirty=true; saveAcct(); lsDel(CRM_V1_KEY);
+    }
+  }
+  crmRefresh();
+}
+function logout(){
+  if(!acct) return;
+  if(acct.dirty&&!confirm('아직 드라이브에 올라가지 않은 변경이 있습니다.\n그래도 로그아웃할까요? (이 기기의 미동기화 기록은 사라집니다)')) return;
+  if(!acct.dirty&&!confirm(acct.email+' 계정에서 로그아웃할까요?\n이 기기에 남은 고객 기록은 지워지고, 구글 드라이브에는 그대로 보관됩니다.')) return;
+  try{ if(accessToken&&window.google) google.accounts.oauth2.revoke(accessToken,()=>{}); }catch(e){}
+  lsDel(CACHE_PREFIX+acct.pid); accessToken=null; tokenExp=0; acct=null; saveAcct();
+  closeBook(); crmClear(); setSync('','');
+  toast('로그아웃했습니다.');
+}
+
+/* ---------- 구글 드라이브 (appDataFolder) ---------- */
+async function driveFetch(url,opt){
+  opt=opt||{};
+  const r=await fetch(url,Object.assign({},opt,{headers:Object.assign({},opt.headers||{},{Authorization:'Bearer '+accessToken})}));
+  if(r.status===401){ accessToken=null; tokenExp=0; throw new Error('auth'); }
+  if(!r.ok) throw new Error('drive '+r.status);
+  return r;
+}
+async function driveFind(){
+  const q=encodeURIComponent("name='"+DRIVE_FILE+"' and trashed=false");
+  const r=await driveFetch('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id,modifiedTime)&orderBy=modifiedTime%20desc&q='+q);
+  const f=((await r.json()).files||[])[0]; return f?f.id:null;
+}
+async function driveRead(id){ const r=await driveFetch('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media'); return r.json(); }
+async function driveWrite(id,data){
+  const body=JSON.stringify(data);
+  if(id){
+    await driveFetch('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media',{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+    return id;
+  }
+  const b='benzcrm'+Date.now();
+  const mp='--'+b+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify({name:DRIVE_FILE,parents:['appDataFolder']})
+    +'\r\n--'+b+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+b+'--';
+  const r=await driveFetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},body:mp});
+  return (await r.json()).id;
+}
+function scheduleSync(){ renderSync(); if(!tokenValid()) return; clearTimeout(syncTimer); syncTimer=setTimeout(syncNow,1200); }
+async function syncNow(){
+  if(!CLOUD||!acct) return;
+  if(!tokenValid()){ renderSync(); return; }
+  if(syncing){ syncAgain=true; return; }
+  syncing=true; setSync('busy');
+  const pidAtStart=acct.pid;
+  try{
+    let id=acct.fileId; let remote=null;
+    if(id){ try{ remote=await driveRead(id); }catch(e){ if(String(e.message)==='auth') throw e; id=null; } }
+    if(!id){ id=await driveFind(); if(id) remote=await driveRead(id); }
+    if(!acct||acct.pid!==pidAtStart) return;
+    const local=crmLoad();
+    const merged=remote?mergeDb(local,remote):local;
+    if(!remote||dbSig(merged)!==dbSig(normDb(remote))) id=await driveWrite(id,merged);
+    if(!acct||acct.pid!==pidAtStart) return;
+    if(dbSig(crmLoad())===dbSig(local)){ localSave(merged); acct.dirty=false; }
+    else { localSave(mergeDb(crmLoad(),merged)); syncAgain=true; }
+    acct.fileId=id; acct.lastSync=Date.now(); saveAcct();
+    applyRemoteSeller(merged.seller);
+    setSync('ok'); crmRefresh(); if($('bookModal').style.display==='flex') renderBook();
+  }catch(e){
+    setSync('err',String(e.message)==='auth'?'로그인이 만료되었습니다':'드라이브 연결 오류');
+  }finally{
+    syncing=false;
+    if(syncAgain){ syncAgain=false; setTimeout(syncNow,300); }
+  }
+}
+/* 담당자 정보도 같은 계정 기기끼리 맞춰줌 */
+function applyRemoteSeller(s){
+  if(!s) return;
+  let cur=null; try{ cur=JSON.parse(lsGet(SELLER_KEY)); }catch(e){}
+  if(!cur||!(cur.name||cur.phone)||(cur.updated||0)<s.updated){
+    lsSet(SELLER_KEY,JSON.stringify({dealer:s.dealer||'',name:s.name||'',phone:s.phone||'',updated:s.updated}));
+    loadSeller();
+  }
+}
+function pushSeller(){
+  if(!CLOUD||!acct) return;
+  let s=null; try{ s=JSON.parse(lsGet(SELLER_KEY)); }catch(e){}
+  if(!s) return;
+  s.updated=Date.now(); lsSet(SELLER_KEY,JSON.stringify(s));
+  const db=crmLoad(); db.seller={dealer:s.dealer||'',name:s.name||'',phone:s.phone||'',updated:s.updated}; crmStore(db);
+}
+
+/* ---------- 동기화 상태 표시 ---------- */
+function setSync(st,msg){ syncState=st; syncMsg=msg||''; renderSync(); }
+function renderSync(){
+  const el=$('syncBox'); if(!el) return;
+  if(!CLOUD){ el.innerHTML='<span class="sy-off">이 기기에만 저장</span>'; return; }
+  if(!acct){
+    el.innerHTML='<button class="mini g" onclick="loginClick()">'+GLOGO+'구글 로그인 · 동기화</button>'; return;
+  }
+  const who='<span class="sy-who">'+esc(acct.email||acct.name||'')+'</span>';
+  let s;
+  if(syncState==='busy') s='<span class="sy-busy">동기화 중…</span>';
+  else if(syncState==='err') s='<button class="mini warn" onclick="syncClick()">⚠ '+esc(syncMsg||'동기화 오류')+' · 다시 시도</button>';
+  else if(acct.dirty||!tokenValid()) s='<button class="mini" onclick="syncClick()">○ '+(acct.dirty?'동기화 대기':'동기화')+(acct.lastSync?' · 최근 '+fmtTs(acct.lastSync).slice(5)+' '+hhmm(acct.lastSync):'')+'</button>';
+  else s='<span class="sy-ok">✓ 동기화됨 '+hhmm(acct.lastSync||Date.now())+'</span>';
+  el.innerHTML=s+' '+who;
+}
+const GLOGO='<svg width="13" height="13" viewBox="0 0 48 48" style="vertical-align:-2px;margin-right:5px"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+function loginClick(){ ensureToken(()=>{ toast((acct&&acct.email?acct.email+' ':'')+'로그인 완료 · 동기화합니다'); }); }
+function syncClick(){ ensureToken(()=>{}); }
+
+/* ---------- 노출 조건: 담당자 기기 ---------- */
+function hasSeller(){ try{ const s=JSON.parse(lsGet(SELLER_KEY)); return !!(s&&(s.name||s.phone)); }catch(e){ return false; } }
 function crmEnabled(){
-  try{ if(/[?&#]crm\b/.test(location.href)) localStorage.setItem(CRM_ON_KEY,'1'); }catch(e){}
-  let flag=false; try{ flag=localStorage.getItem(CRM_ON_KEY)==='1'; }catch(e){}
-  return flag||hasSeller();
+  if(/[?&#]crm\b/.test(location.href)) lsSet(CRM_ON_KEY,'1');
+  return lsGet(CRM_ON_KEY)==='1'||hasSeller()||!!loadAcct();
 }
 function crmVisibility(){
   const on=crmEnabled();
   $('crmBar').style.display=on?'block':'none';
   $('btnSaveQuote').style.display=on?'':'none';
-  if(on) crmRefresh();
+  if(on){ loadGis(); crmRefresh(); }
 }
 
+/* ---------- 견적 입력값 ---------- */
 function getInputs(){
   return {
     car:DATA[+carSel.value].name, region:REGIONS[+regSel.value][0], year:(/개소세5%|MY27/.test(DATA[+carSel.value].name)?'MY 2027':ySel.value), color:cSel.value, interior:iSel.value,
@@ -719,7 +941,7 @@ function applyInputs(i){
   calc(); return true;
 }
 
-/* 고객 매칭: 선택한 고객 → 연락처 일치 → 동명 1명 */
+/* ---------- 고객 매칭: 선택한 고객 → 연락처 일치 → 동명 1명 ---------- */
 function crmMatch(db,name,phone){
   name=String(name||'').trim(); const p=digitsOf(phone);
   if(selectedCid){ const c=db.customers.find(x=>x.id===selectedCid); if(c&&c.name===name) return {c}; }
@@ -731,15 +953,17 @@ function crmMatch(db,name,phone){
     if(same.length>1) return {ambiguous:same.length};
   } else {
     const noPhone=same.filter(x=>!digitsOf(x.phone));
-    if(noPhone.length===1) return {c:noPhone[0], fillPhone:true};
+    if(noPhone.length===1) return {c:noPhone[0]};
   }
   return {};
 }
 function quotesOf(db,cid){ return db.quotes.filter(q=>q.cid===cid).sort((a,b)=>b.ts-a.ts); }
 
+/* 로컬(계정 캐시)에 저장. 동기화는 crmStore가 예약 */
 function saveQuote(name,phone,memo){
   name=String(name||'').trim();
   if(!name){ alert('고객명을 입력해 주세요.'); return null; }
+  if(CLOUD&&!acct){ toast('구글 로그인 후 저장할 수 있습니다.'); return null; }
   const db=crmLoad(); const m=crmMatch(db,name,phone); const now=Date.now();
   if(m.ambiguous){ alert('같은 이름의 고객이 '+m.ambiguous+'명 있습니다.\n연락처를 입력하거나 자동완성 목록에서 고객을 선택해 주세요.'); return null; }
   let c=m.c, isNew=false;
@@ -748,22 +972,23 @@ function saveQuote(name,phone,memo){
   const inputs=getInputs(), sig=JSON.stringify(inputs);
   const last=quotesOf(db,c.id)[0];
   let updated=false;
-  if(last&&last.sig===sig&&sameDay(last.ts,now)){ last.ts=now; last.result=Object.assign({},LAST); if(memo) last.memo=memo; updated=true; }
-  else db.quotes.push({id:uid(),cid:c.id,ts:now,inputs,sig,result:Object.assign({},LAST),memo:memo||''});
+  if(last&&last.sig===sig&&sameDay(last.ts,now)){ last.ts=now; last.updated=now; last.result=Object.assign({},LAST); if(memo) last.memo=memo; updated=true; }
+  else db.quotes.push({id:uid(),cid:c.id,ts:now,updated:now,inputs,sig,result:Object.assign({},LAST),memo:memo||''});
   if(!crmStore(db)) return null;
   selectedCid=c.id;
   $('cuName').value=c.name; $('cuPhone').value=c.phone||'';
-  toast((isNew?'신규 고객 ':'')+c.name+' 고객님 견적 '+(updated?'갱신':'저장')+' · 총 '+quotesOf(db,c.id).length+'건');
+  toast((isNew?'신규 고객 ':'')+c.name+' 고객님 견적 '+(updated?'갱신':'저장')+' · 총 '+quotesOf(db,c.id).length+'건'+(CLOUD&&!tokenValid()?' (동기화 대기)':''));
   crmRefresh(); return c;
 }
 
 function toast(msg){
   const t=$('toast'); t.textContent=msg; t.style.opacity='1';
-  clearTimeout(toast._t); toast._t=setTimeout(()=>{ t.style.opacity='0'; },2200);
+  clearTimeout(toast._t); toast._t=setTimeout(()=>{ t.style.opacity='0'; },2600);
 }
 
-/* 상단 고객 입력줄 */
+/* ---------- 상단 고객 입력줄 ---------- */
 function crmRefresh(){
+  renderSync();
   const db=crmLoad();
   const dl=$('cuList'); dl.innerHTML='';
   db.customers.slice().sort((a,b)=>b.updated-a.updated).forEach(c=>{
@@ -773,13 +998,14 @@ function crmRefresh(){
   const name=$('cuName').value.trim(), phone=$('cuPhone').value;
   $('cuPrint').textContent=name?name+' 고객님':'';
   const box=$('cuMatch');
+  if(CLOUD&&!acct){ box.innerHTML='<span class="new">구글 로그인</span> 하면 고객 견적이 본인 구글 드라이브에 저장되어 폰·PC에서 함께 보입니다. 다른 담당자는 볼 수 없습니다.'; return; }
   if(!name&&!digitsOf(phone)){ box.innerHTML=''; return; }
   const m=crmMatch(db,name,phone);
   if(m.ambiguous){ box.innerHTML='<span class="warn">같은 이름의 고객이 '+m.ambiguous+'명입니다 — 연락처를 입력하거나 목록에서 선택하세요.</span>'; return; }
   if(m.c){
     const qs=quotesOf(db,m.c.id), lq=qs[0];
     box.innerHTML='<span class="ok">✓ 저장 고객</span> · 견적 '+qs.length+'건'
-      +(lq?' · 최근 '+fmtTs(lq.ts)+' '+esc(shortCar(lq.inputs.car))+' / '+won(lq.result.grand||0)+'원':'')
+      +(lq?' · 최근 '+fmtTs(lq.ts)+' '+esc(shortCar(lq.inputs.car))+' / '+won((lq.result||{}).grand||0)+'원':'')
       +(m.c.memo?'<br><span class="memo">메모: '+esc(m.c.memo)+'</span>':'')
       +' <button class="mini" onclick="openBook(\''+m.c.id+'\')">이력 보기</button>';
   } else if(name){
@@ -795,57 +1021,81 @@ function onCuInput(e){
 }
 function crmClear(){ selectedCid=null; ['cuName','cuPhone','cuMemo'].forEach(id=>{ $(id).value=''; }); crmRefresh(); }
 
-/* 저장 / 인쇄 흐름 */
+/* ---------- 저장 / 인쇄 흐름 (클릭 안에서 로그인 토큰 확보 → 저장 → 인쇄 → 동기화) ---------- */
 function saveFromBar(){
   const name=$('cuName').value.trim();
   if(!name){ openSaveModal('save'); return; }
-  saveQuote(name,$('cuPhone').value,$('cuMemo').value.trim());
+  const go=()=>saveQuote(name,$('cuPhone').value,$('cuMemo').value.trim());
+  if(CLOUD&&!acct){ ensureToken(go); return; }
+  ensureToken(go,go);
 }
 function doPrint(){
-  if(crmEnabled()){
-    const name=$('cuName').value.trim();
-    if(!name){ openSaveModal('print'); return; }
-    if(!saveQuote(name,$('cuPhone').value,$('cuMemo').value.trim())) return;
+  if(!crmEnabled()){ doPrintRaw(); return; }
+  const name=$('cuName').value.trim();
+  if(!name){ openSaveModal('print'); return; }
+  const memo=$('cuMemo').value.trim(), phone=$('cuPhone').value;
+  if(CLOUD&&!acct){
+    ensureToken(()=>{ saveQuote(name,phone,memo); doPrintRaw(); },
+                ()=>{ toast('로그인하지 않아 견적은 저장되지 않았습니다.'); doPrintRaw(); });
+    return;
   }
-  doPrintRaw();
+  const go=()=>{ saveQuote(name,phone,memo); doPrintRaw(); };
+  ensureToken(go,go);
 }
 function openSaveModal(action){
   pendingAction=action;
   $('smName').value=$('cuName').value; $('smPhone').value=$('cuPhone').value; $('smMemo').value=$('cuMemo').value;
   $('smSkip').textContent=action==='print'?'저장 없이 인쇄':'취소';
   $('smOk').textContent=action==='print'?'저장 후 인쇄':'저장';
+  $('smLogin').style.display=(CLOUD&&!acct)?'block':'none';
   $('saveModal').style.display='flex'; setTimeout(()=>$('smName').focus(),50);
 }
 function closeSaveModal(){ $('saveModal').style.display='none'; }
 function saveModalSkip(){ closeSaveModal(); if(pendingAction==='print') doPrintRaw(); pendingAction=null; }
 function saveModalOk(){
-  const v=$('smName').value; const db=crmLoad();
-  const hit=db.customers.find(c=>(c.name+' · '+(c.phone||'번호 없음'))===v);
+  const v=$('smName').value;
+  const hit=crmLoad().customers.find(c=>(c.name+' · '+(c.phone||'번호 없음'))===v);
   if(hit){ selectedCid=hit.id; $('smName').value=hit.name; if(!$('smPhone').value) $('smPhone').value=hit.phone||''; }
+  if(!$('smName').value.trim()){ alert('고객명을 입력해 주세요.'); return; }
   $('cuName').value=$('smName').value; $('cuPhone').value=$('smPhone').value; $('cuMemo').value=$('smMemo').value;
-  if(!saveQuote($('smName').value,$('smPhone').value,$('smMemo').value.trim())) return;
-  closeSaveModal(); if(pendingAction==='print') doPrintRaw(); pendingAction=null;
+  const act=pendingAction; pendingAction=null;
+  const name=$('smName').value, phone=$('smPhone').value, memo=$('smMemo').value.trim();
+  const done=()=>{ const ok=saveQuote(name,phone,memo); if(ok||act==='print') closeSaveModal(); if(act==='print') doPrintRaw(); };
+  if(CLOUD&&!acct){
+    ensureToken(done,()=>{ if(act==='print'){ closeSaveModal(); toast('로그인하지 않아 견적은 저장되지 않았습니다.'); doPrintRaw(); } else pendingAction=act; });
+    return;
+  }
+  ensureToken(done,done);
 }
 
-/* 고객 견적함 */
-function openBook(cid){ openCid=cid||null; $('bookQ').value=''; renderBook(); $('bookModal').style.display='flex'; }
+/* ---------- 고객 견적함 ---------- */
+function openBook(cid){
+  openCid=cid||null; $('bookQ').value=''; renderBook(); $('bookModal').style.display='flex';
+  if(CLOUD&&acct&&tokenValid()) syncNow();
+}
 function closeBook(){ $('bookModal').style.display='none'; }
 function renderBook(){
+  const acc=$('bookAcct');
+  if(CLOUD){
+    acc.innerHTML=acct?('<span>'+GLOGO+esc(acct.email||acct.name)+'</span> <button class="mini" onclick="logout()">로그아웃</button>')
+      :('<button class="mini g" onclick="loginClick()">'+GLOGO+'구글 로그인 · 동기화</button>');
+  } else acc.innerHTML='';
   const db=crmLoad(), q=$('bookQ').value.trim().toLowerCase(), qd=digitsOf(q);
   let list=db.customers.map(c=>({c,qs:quotesOf(db,c.id)}));
   if(q) list=list.filter(({c,qs})=>c.name.toLowerCase().includes(q)||(qd&&digitsOf(c.phone).includes(qd))
     ||(c.memo||'').toLowerCase().includes(q)||qs.some(x=>x.inputs.car.toLowerCase().includes(q)||(x.memo||'').toLowerCase().includes(q)));
   list.sort((a,b)=>((b.qs[0]||{}).ts||b.c.updated)-((a.qs[0]||{}).ts||a.c.updated));
   const el=$('bookList');
+  if(CLOUD&&!acct){ el.innerHTML='<p class="empty">구글 로그인하면 본인이 저장한 고객과 견적이 보입니다.<br>다른 담당자의 기록은 보이지 않습니다.</p>'; return; }
   if(!list.length){ el.innerHTML='<p class="empty">'+(db.customers.length?'검색 결과가 없습니다.':'저장된 고객이 없습니다.<br>견적 화면에서 고객명을 입력하고 <b>견적 저장</b> 또는 <b>인쇄</b>를 누르면 여기에 쌓입니다.')+'</p>'; return; }
   el.innerHTML=list.map(({c,qs})=>{
     const open=openCid===c.id||(!!q&&list.length<=3);
     const lq=qs[0];
     const rows=qs.map(x=>{
-      const r=x.result||{}, i=x.inputs, opts=[i.year,i.color.replace(/^\d+ - /,''),i.interior].join(' · ');
+      const r=x.result||{}, i=x.inputs, opts=[i.year,String(i.color).replace(/^\d+ - /,''),i.interior].join(' · ');
       return '<div class="q-row"><div class="q-l"><div class="q-car">'+esc(shortCar(i.car))+'</div>'
         +'<div class="q-sub">'+fmtTs(x.ts,true)+' · '+esc(opts)+' · 할인 '+((r.discRate||0)*100).toFixed(1)+'%'
-        +(i.opt?' · 옵션 '+won(i.opt):'')+' · '+esc(i.region.split(' · ')[0])+'</div>'
+        +(i.opt?' · 옵션 '+won(i.opt):'')+' · '+esc(String(i.region).split(' · ')[0])+'</div>'
         +(x.memo?'<div class="q-memo">'+esc(x.memo)+'</div>':'')+'</div>'
         +'<div class="q-r"><div class="q-amt">'+won(r.grand||0)+'원</div>'
         +'<div class="q-btns"><button class="mini pri" onclick="loadQuote(\''+x.id+'\')">불러오기</button>'
@@ -881,8 +1131,9 @@ function loadQuote(qid){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function delQuote(qid){
-  if(!confirm('이 견적을 삭제할까요?')) return;
-  const db=crmLoad(); db.quotes=db.quotes.filter(q=>q.id!==qid); crmStore(db); renderBook(); crmRefresh();
+  if(!confirm('이 견적을 삭제할까요?\n(로그인한 모든 기기에서 함께 삭제됩니다)')) return;
+  const db=crmLoad(); db.quotes=db.quotes.filter(q=>q.id!==qid); db.deleted[qid]=Date.now();
+  crmStore(db); renderBook(); crmRefresh();
 }
 function editCu(id){
   const db=crmLoad(), c=db.customers.find(x=>x.id===id); if(!c) return;
@@ -894,13 +1145,15 @@ function editCu(id){
 }
 function delCu(id){
   const db=crmLoad(), c=db.customers.find(x=>x.id===id); if(!c) return;
-  const n=quotesOf(db,id).length;
-  if(!confirm(c.name+' 고객과 견적 '+n+'건을 모두 삭제할까요?\n삭제 후에는 되돌릴 수 없습니다.')) return;
+  const qs=quotesOf(db,id);
+  if(!confirm(c.name+' 고객과 견적 '+qs.length+'건을 모두 삭제할까요?\n로그인한 모든 기기에서 함께 삭제되며 되돌릴 수 없습니다.')) return;
+  const now=Date.now();
+  db.deleted[id]=now; qs.forEach(q=>{ db.deleted[q.id]=now; });
   db.customers=db.customers.filter(x=>x.id!==id); db.quotes=db.quotes.filter(q=>q.cid!==id);
   crmStore(db); if(selectedCid===id) crmClear(); renderBook(); crmRefresh();
 }
 
-/* 백업 · 내보내기 */
+/* ---------- 백업 · 내보내기 ---------- */
 function download(name,text,type){
   const b=new Blob([text],{type}); const a=document.createElement('a');
   a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click();
@@ -909,7 +1162,7 @@ function download(name,text,type){
 function stamp(){ const d=new Date(),p=n=>String(n).padStart(2,'0'); return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate()); }
 function exportJson(){
   const db=crmLoad();
-  download('고객견적함_백업_'+stamp()+'.json',JSON.stringify({app:'benz-crm',v:1,exported:Date.now(),...db}),'application/json');
+  download('고객견적함_백업_'+stamp()+'.json',JSON.stringify(Object.assign({app:'benz-crm',exported:Date.now()},db)),'application/json');
 }
 function exportCsv(){
   const db=crmLoad(), cq=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
@@ -923,28 +1176,32 @@ function exportCsv(){
 }
 function importJson(file){
   if(!file) return;
+  if(CLOUD&&!acct){ alert('구글 로그인 후 불러올 수 있습니다.'); $('importFile').value=''; return; }
   const fr=new FileReader();
   fr.onload=()=>{
     let inc; try{ inc=JSON.parse(fr.result); }catch(e){ alert('백업 파일을 읽을 수 없습니다.'); return; }
     if(!inc||!Array.isArray(inc.customers)||!Array.isArray(inc.quotes)){ alert('고객 견적함 백업 파일이 아닙니다.'); return; }
-    const db=crmLoad(); let nc=0,nq=0;
-    inc.customers.forEach(c=>{ if(!db.customers.some(x=>x.id===c.id)){ db.customers.push(c); nc++; } });
-    inc.quotes.forEach(q=>{ if(!db.quotes.some(x=>x.id===q.id)){ db.quotes.push(q); nq++; } });
-    if(crmStore(db)){ alert('불러오기 완료: 고객 '+nc+'명 · 견적 '+nq+'건 추가'); renderBook(); crmRefresh(); }
+    const before=crmLoad(), merged=mergeDb(before,inc);
+    const nc=merged.customers.length-before.customers.length, nq=merged.quotes.length-before.quotes.length;
+    if(crmStore(merged)){ alert('불러오기 완료: 고객 '+nc+'명 · 견적 '+nq+'건 추가'); renderBook(); crmRefresh(); }
   };
   fr.readAsText(file);
   $('importFile').value='';
 }
 
-['cuName'].forEach(id=>$(id).addEventListener('input',onCuInput));
+/* ---------- 이벤트 ---------- */
+$('cuName').addEventListener('input',onCuInput);
 $('cuPhone').addEventListener('input',()=>{ selectedCid=null; crmRefresh(); });
 $('cuPhone').addEventListener('blur',function(){ if(this.value) this.value=fmtPhone(this.value); crmRefresh(); });
 $('smPhone').addEventListener('blur',function(){ if(this.value) this.value=fmtPhone(this.value); });
 $('smName').addEventListener('keydown',e=>{ if(e.key==='Enter') saveModalOk(); });
 $('bookQ').addEventListener('input',renderBook);
 $('importFile').addEventListener('change',function(){ importJson(this.files[0]); });
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'&&CLOUD&&acct&&tokenValid()) syncNow(); });
+window.addEventListener('online',()=>{ if(CLOUD&&acct&&tokenValid()) syncNow(); });
 const _saveSellerOrig=saveSeller;
-saveSeller=function(){ _saveSellerOrig(); crmVisibility(); };
+saveSeller=function(){ _saveSellerOrig(); pushSeller(); crmVisibility(); };
+acct=CLOUD?loadAcct():null;
 crmVisibility();
 </script>
 </body>
