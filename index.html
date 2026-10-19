@@ -389,7 +389,7 @@
         <button class="btn" onclick="document.getElementById('importFile').click()">백업 불러오기</button>
         <input type="file" id="importFile" accept=".json,application/json" style="display:none;">
       </div>
-      <p class="se-hint">고객 정보는 로그인한 담당자 <b>본인 구글 드라이브의 앱 전용 숨김 공간</b>에 저장되어, 같은 구글 계정으로 로그인한 본인 폰·PC끼리만 동기화됩니다. 다른 담당자·고객·사이트 운영자는 볼 수 없습니다. 공용 PC에서는 사용 후 <b>로그아웃</b>하세요.</p>
+      <p class="se-hint">고객 정보는 로그인한 담당자 <b>본인 구글 드라이브의 앱 전용 숨김 공간</b>에 저장되어, 같은 구글 계정으로 로그인한 본인 폰·PC끼리만 동기화됩니다. 다른 담당자·고객·사이트 운영자는 볼 수 없습니다. 공용 PC에서는 사용 후 <b>로그아웃</b>하세요. <a href="privacy.html" target="_blank" style="color:inherit;">개인정보처리방침</a></p>
     </div>
   </div>
   <div class="toast" id="toast"></div>
@@ -662,7 +662,7 @@ calc();
    · 담당자마다 자기 구글 계정으로 로그인 → 자기 드라이브 appDataFolder에만 저장 → 본인 폰·PC끼리만 동기화
    · 다른 담당자·고객·사이트 운영자 누구도 남의 데이터에 접근 불가 (서버 없음)
    · GOOGLE_CLIENT_ID가 비어 있으면 v1처럼 이 기기에만 저장 */
-const GOOGLE_CLIENT_ID='__GOOGLE_CLIENT_ID__';
+const GOOGLE_CLIENT_ID='1027699451893-l232dq521dvk59bb3o5e9otro7ujjqi7.apps.googleusercontent.com';
 const CLOUD=/\.apps\.googleusercontent\.com$/.test(GOOGLE_CLIENT_ID);
 const DRIVE_SCOPE='https://www.googleapis.com/auth/drive.appdata';
 const DRIVE_FILE='benz_crm.json';
